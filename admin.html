@@ -19,6 +19,7 @@
   :root{
     --group-bg:#FFFFFF; --group-border:var(--line);
     --step-bg:#F5F5F3; --step-border:var(--line);
+    --field-bg:#FFFFFF;
     --btn-bg:#141414; --btn-border:#141414; --btn-ink:#FFFFFF; --btn-hover-bg:#262626;
   }
   /* Paleta gris neutra para el admin en tema oscuro (mismos niveles de luz que el
@@ -30,6 +31,7 @@
       --line:#3B3B3B; --line-strong:#505050;
       --group-bg:var(--surface-3); --group-border:var(--line-strong);
       --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
+      --field-bg:var(--surface-2);
       --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3);
     }
   }
@@ -40,6 +42,7 @@
     --card-shadow:0 4px 10px rgba(0,0,0,.55), 0 18px 40px -14px rgba(0,0,0,.85);
     --group-bg:var(--surface-3); --group-border:var(--line-strong);
     --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
+    --field-bg:var(--surface-2);
     --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3);
   }
   body{margin:0}
@@ -49,7 +52,7 @@
   .admin-field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
   .admin-field label{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
   .admin-card input:not([type="checkbox"]), .admin-card textarea, .admin-group input:not([type="checkbox"]), .admin-group textarea, .admin-step input:not([type="checkbox"]), .admin-step textarea{
-    width:100%;box-sizing:border-box;font-family:var(--body);font-size:14.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;margin-bottom:8px
+    width:100%;box-sizing:border-box;font-family:var(--body);font-size:14.5px;color:var(--ink);background:var(--field-bg);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;margin-bottom:8px
   }
   .admin-card textarea, .admin-group textarea, .admin-step textarea{resize:vertical}
   .admin-sub input[type="checkbox"]{flex:none;width:15px;height:15px;margin:0;accent-color:var(--accent)}
@@ -88,7 +91,7 @@
   .admin-insert-zone{position:relative;height:26px;margin:6px 0}
   .admin-insert-zone button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;padding:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:20px;line-height:1;cursor:pointer;opacity:.45;transition:opacity .15s ease,border-color .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center}
   .admin-insert-zone:hover button{opacity:1;border-color:var(--accent);color:var(--accent)}
-  .admin-file-upload{display:flex;align-items:center;gap:8px;margin-bottom:8px;width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px}
+  .admin-file-upload{display:flex;align-items:center;gap:8px;margin-bottom:8px;width:100%;box-sizing:border-box;background:var(--field-bg);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px}
   .admin-file-upload input[type="file"]{flex:1;font-size:12.5px;color:var(--muted);width:auto;margin-bottom:0;background:none;border:none;padding:0}
   .admin-upload-status{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
   .admin-upload-status.ok{color:var(--accent)}
