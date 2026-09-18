@@ -22,6 +22,7 @@
     --card-shadow:0 3px 8px rgba(23,33,28,.12), 0 14px 32px -12px rgba(23,33,28,.24);
     --field-bg:#FFFFFF;
     --btn-bg:var(--accent-ink); --btn-border:var(--accent-ink); --btn-ink:#FFFFFF; --btn-hover-bg:var(--accent); --btn-hover-ink:#FFFFFF;
+    --group-top-bg:color-mix(in srgb, var(--accent-soft) 72%, var(--accent) 28%);
   }
   /* Paleta gris neutra para el admin en tema oscuro (mismos niveles de luz que el
      tema base, sin el tinte verde) — el verde queda reservado a los acentos. */
@@ -34,6 +35,7 @@
       --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
       --field-bg:var(--surface-2);
       --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3); --btn-hover-ink:var(--accent);
+      --group-top-bg:color-mix(in srgb, var(--accent-soft) 78%, var(--accent) 22%);
     }
   }
   :root[data-theme="dark"]{
@@ -45,6 +47,7 @@
     --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
     --field-bg:var(--surface-2);
     --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3); --btn-hover-ink:var(--accent);
+    --group-top-bg:color-mix(in srgb, var(--accent-soft) 78%, var(--accent) 22%);
   }
   body{margin:0}
   .admin-wrap{max-width:1080px;margin:0 auto;padding:24px 22px 90px}
@@ -71,7 +74,7 @@
   #tabsAdmin .tab{padding:8px 14px;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;font-family:var(--display);font-weight:700;font-size:14px}
   #tabsAdmin .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
   .admin-group{background:var(--group-bg);border:1px solid var(--group-border);border-radius:10px;padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
-  .admin-group-top{margin:-16px -18px 0;padding:16px 18px 24px;border-radius:9px 9px 0 0;background:color-mix(in srgb, var(--accent-soft) 50%, var(--accent) 50%)}
+  .admin-group-top{margin:-16px -18px 0;padding:16px 18px 24px;border-radius:9px 9px 0 0;background:var(--group-top-bg)}
   .admin-group-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   .admin-group-tag{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);background:var(--surface-2);border-radius:5px;padding:4px 8px}
   .admin-group-title{flex:1;min-width:160px;font-weight:800!important;font-size:17px!important;font-family:var(--display)!important;margin-bottom:0!important}
