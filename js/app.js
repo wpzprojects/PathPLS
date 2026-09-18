@@ -203,6 +203,7 @@
           slot.dataset.n = n;
           box.appendChild(slot);
           io.observe(slot);
+          fitSlot(pdf, slot, n);
         }
       }).catch(function () { pdfStarted = false; status.textContent = 'No se pudo abrir el documento. Usa "Descargar PDF".'; });
     };
@@ -216,10 +217,12 @@
   var pzCanvas = null, pzZoom = 1, PZ_MIN = 1, pzPage = null, pzBase = null, pzRid = 0, pzTimer = null, pzRW = 0;
   var PZ_PIXELS = 16000000;   // tope de píxeles por canvas (límite seguro en móviles)
 
+  // 100% = la lámina completa dentro de la ventana (ancho o alto, lo que limite)
+  function pzFitW() { return Math.min(pzScroll.clientWidth, pzScroll.clientHeight * pzBase.width / pzBase.height); }
   function pzMaxW() { return Math.floor(Math.sqrt(PZ_PIXELS * pzBase.width / pzBase.height)); }
   function pzMax() {
     var dpr = window.devicePixelRatio || 1;
-    return Math.max(2, Math.min(8, pzMaxW() / (pzScroll.clientWidth * dpr)));
+    return Math.max(2, Math.min(8, pzMaxW() / (pzFitW() * dpr)));
   }
 
   function pzApply(z, cx, cy) {
@@ -227,7 +230,7 @@
     var old = pzCanvas.getBoundingClientRect();
     var rel = { x: (pzScroll.scrollLeft + cx - pzScroll.getBoundingClientRect().left) / (old.width || 1), y: (pzScroll.scrollTop + cy - pzScroll.getBoundingClientRect().top) / (old.height || 1) };
     pzZoom = Math.max(PZ_MIN, Math.min(pzMax(), z));
-    pzCanvas.style.width = Math.round(pzScroll.clientWidth * pzZoom) + 'px';
+    pzCanvas.style.width = Math.round(pzFitW() * pzZoom) + 'px';
     pzPct.textContent = Math.round(pzZoom * 100) + '%';
     var now = pzCanvas.getBoundingClientRect();
     pzScroll.scrollLeft = rel.x * now.width - (cx - pzScroll.getBoundingClientRect().left);
@@ -240,7 +243,7 @@
   function pzRender() {
     if (!pzPage || pz.hidden) return;
     var dpr = window.devicePixelRatio || 1;
-    var want = Math.min(pzMaxW(), Math.ceil(pzScroll.clientWidth * pzZoom * dpr));
+    var want = Math.min(pzMaxW(), Math.ceil(pzFitW() * pzZoom * dpr));
     if (pzCanvas && pzRW >= want * 0.97) return;
     var id = ++pzRid;
     var vp = pzPage.getViewport({ scale: want / pzBase.width });
@@ -248,7 +251,7 @@
     c.width = Math.round(vp.width); c.height = Math.round(vp.height);
     pzPage.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () {
       if (id !== pzRid || pz.hidden) return;
-      c.style.width = pzCanvas ? pzCanvas.style.width : Math.round(pzScroll.clientWidth * pzZoom) + 'px';
+      c.style.width = pzCanvas ? pzCanvas.style.width : Math.round(pzFitW() * pzZoom) + 'px';
       if (pzCanvas) pzScroll.replaceChild(c, pzCanvas); else pzScroll.appendChild(c);
       pzCanvas = c;
       pzRW = c.width;
@@ -302,6 +305,14 @@
     if (e.key === '+' || e.key === '=') document.getElementById('pdfzIn').click();
     if (e.key === '-') document.getElementById('pdfzOut').click();
   });
+
+  // cada lámina toma su proporción real (no todas son 16:9)
+  function fitSlot(pdf, slot, n) {
+    pdf.getPage(n).then(function (page) {
+      var v = page.getViewport({ scale: 1 });
+      slot.style.aspectRatio = v.width + ' / ' + v.height;
+    });
+  }
 
   function renderPdfPage(pdf, slot) {
     pdf.getPage(+slot.dataset.n).then(function (page) {
