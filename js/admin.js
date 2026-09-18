@@ -253,7 +253,7 @@
   function renderThumbsHtml(step, gi, si) {
     return (step.images || []).map(function (img, idx) {
       var src = localPreviews[img] || img;
-      return '<div class="admin-img-thumb" draggable="true" data-idx="' + idx + '"><img src="' + esc(src) + '" alt="" loading="lazy">' +
+      return '<div class="admin-img-thumb" draggable="true" data-idx="' + idx + '" data-path="' + esc(img) + '"><img src="' + esc(src) + '" alt="" loading="lazy">' +
         '<button type="button" class="admin-img-del" data-action="del-image" data-gi="' + gi + '" data-si="' + si + '" data-idx="' + idx + '" title="Eliminar imagen">&times;</button></div>';
     }).join('');
   }
@@ -381,24 +381,69 @@
     arr.splice(to, 0, item);
   }
 
-  // arrastrar una miniatura reordena las imágenes del paso; arrastrar un
-  // archivo desde el explorador lo sube, igual que el botón "+"
+  // arrastrar una miniatura reordena las imágenes del paso en vivo (las demás
+  // se deslizan para hacerle espacio); arrastrar un archivo desde el
+  // explorador lo sube, igual que el botón "+"
+  var dragThumb = null;
+
+  function thumbFlip(container, mutateDom) {
+    var before = {};
+    container.querySelectorAll('.admin-img-thumb').forEach(function (el) {
+      before[el.dataset.path] = el.getBoundingClientRect();
+    });
+    mutateDom();
+    container.querySelectorAll('.admin-img-thumb').forEach(function (el) {
+      var b = before[el.dataset.path];
+      if (!b) return;
+      var a = el.getBoundingClientRect();
+      var dx = b.left - a.left;
+      if (!dx) return;
+      el.style.transition = 'none';
+      el.style.transform = 'translateX(' + dx + 'px)';
+      requestAnimationFrame(function () {
+        el.style.transition = 'transform .2s ease';
+        el.style.transform = '';
+      });
+    });
+  }
+
+  // toma el orden actual del DOM y lo guarda en step.images (tras un reordenamiento en vivo)
+  function commitThumbOrder(container) {
+    var gi = +container.dataset.gi, si = +container.dataset.si;
+    var step = stepAt(gi, si);
+    step.images = Array.prototype.map.call(container.querySelectorAll('.admin-img-thumb'), function (el) { return el.dataset.path; });
+    container.querySelectorAll('.admin-img-thumb').forEach(function (el, i) {
+      el.dataset.idx = i;
+      el.querySelector('.admin-img-del').dataset.idx = i;
+    });
+  }
+
   els.editor.addEventListener('dragstart', function (e) {
     var thumb = e.target.closest && e.target.closest('.admin-img-thumb');
     if (!thumb) return;
-    e.dataTransfer.setData('text/x-thumb-idx', thumb.dataset.idx);
+    dragThumb = thumb;
+    e.dataTransfer.setData('text/x-thumb', thumb.dataset.path || '');
     e.dataTransfer.effectAllowed = 'move';
     thumb.classList.add('dragging');
   });
   els.editor.addEventListener('dragend', function (e) {
-    var thumb = e.target.closest && e.target.closest('.admin-img-thumb');
-    if (thumb) thumb.classList.remove('dragging');
+    var container = dragThumb && dragThumb.closest('.admin-images');
+    if (dragThumb) dragThumb.classList.remove('dragging');
+    if (container) commitThumbOrder(container);
+    dragThumb = null;
   });
   els.editor.addEventListener('dragover', function (e) {
     var container = e.target.closest && e.target.closest('.admin-images');
     if (!container) return;
     e.preventDefault();
-    container.classList.add('drop-active');
+    if (!dragThumb || !container.contains(dragThumb)) { container.classList.add('drop-active'); return; }
+    var overThumb = e.target.closest && e.target.closest('.admin-img-thumb');
+    if (!overThumb || overThumb === dragThumb) return;
+    var rect = overThumb.getBoundingClientRect();
+    var before = e.clientX < rect.left + rect.width / 2;
+    thumbFlip(container, function () {
+      container.insertBefore(dragThumb, before ? overThumb : overThumb.nextSibling);
+    });
   });
   els.editor.addEventListener('dragleave', function (e) {
     var container = e.target.closest && e.target.closest('.admin-images');
@@ -419,15 +464,7 @@
       return;
     }
 
-    var fromIdx = e.dataTransfer.getData('text/x-thumb-idx');
-    if (fromIdx === '') return;
-    fromIdx = +fromIdx;
-    var step = stepAt(gi, si);
-    var targetThumb = e.target.closest && e.target.closest('.admin-img-thumb');
-    var toIdx = targetThumb ? +targetThumb.dataset.idx : step.images.length - 1;
-    if (fromIdx === toIdx) return;
-    moveItem(step.images, fromIdx, toIdx);
-    refreshThumbs(gi, si);
+    if (dragThumb && container.contains(dragThumb)) commitThumbOrder(container);
   });
 
   function newStep() { return { _cid: newCid(), title: 'Nuevo paso', sub: false, route: null, comment: '', commentList: null, images: [] }; }
