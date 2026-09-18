@@ -1,8 +1,5 @@
 (function () {
   var q = document.getElementById('q');
-  var stCount = document.getElementById('stCount');
-  var stShots = document.getElementById('stShots');
-  var stats = document.getElementById('stats');
   var empty = document.getElementById('empty');
   var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
@@ -36,12 +33,9 @@
     var steps = panel.querySelectorAll('.step');
 
     if (!steps.length) {                       // panel "De interés": sin filtro
-      stCount.textContent = 'Referencias';
-      stShots.hidden = true;
       empty.hidden = true;
       return;
     }
-    stShots.hidden = false;
     var shown = 0;
     steps.forEach(function (s) {
       var match = !term || norm(s.dataset.q).indexOf(term) !== -1;
@@ -55,12 +49,6 @@
       var c = g.querySelector('.gcount');
       if (c) c.textContent = (term && vis !== all ? vis + ' de ' + all : all) + ' pasos';
     });
-    var shots = panel.querySelectorAll('.step:not([hidden]) .thumb').length;
-    stCount.textContent = term
-      ? shown + ' de ' + steps.length + ' pasos'
-      : steps.length + ' pasos';
-    stShots.textContent = shots + (shots === 1 ? ' captura' : ' capturas');
-    stats.classList.toggle('filtering', !!term);
     empty.hidden = shown !== 0;
   }
 
