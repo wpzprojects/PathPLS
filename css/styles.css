@@ -45,8 +45,8 @@ button{font:inherit}
 .theme-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .theme-toggle .i-moon{fill:currentColor;stroke:none}
 .theme-toggle .i-sun{display:none}
-:root[data-theme="light"] .theme-toggle .i-moon{display:none}
-:root[data-theme="light"] .theme-toggle .i-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
 .mh-in{max-width:1080px;margin:0 auto;padding:13px 22px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
 .brand{font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:.15em;text-transform:uppercase}
 .brand span{color:#8FD9BC}
