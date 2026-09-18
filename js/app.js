@@ -215,11 +215,13 @@
   var pzScroll = document.getElementById('pdfzScroll');
   var pzPct = document.getElementById('pdfzPct');
   var pzCanvas = null, pzZoom = 1, PZ_MIN = 1, pzPage = null, pzBase = null, pzRid = 0, pzTimer = null, pzRW = 0;
-  var PZ_PIXELS = 16000000;   // tope de píxeles por canvas (límite seguro en móviles)
+  // tope de píxeles por canvas: iOS ~16M (límite duro de Safari), táctiles ~32M, escritorio ~64M
+  var PZ_IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var PZ_PIXELS = PZ_IOS ? 16000000 : (window.matchMedia('(pointer: coarse)').matches ? 32000000 : 64000000);
 
   // 100% = la lámina completa dentro de la ventana (ancho o alto, lo que limite)
   function pzFitW() { return Math.min(pzScroll.clientWidth, pzScroll.clientHeight * pzBase.width / pzBase.height); }
-  function pzMaxW() { return Math.floor(Math.sqrt(PZ_PIXELS * pzBase.width / pzBase.height)); }
+  function pzMaxW() { return Math.min(16000, Math.floor(Math.sqrt(PZ_PIXELS * pzBase.width / pzBase.height))); }
   function pzMax() {
     var dpr = window.devicePixelRatio || 1;
     return Math.max(2, Math.min(8, pzMaxW() / (pzFitW() * dpr)));
