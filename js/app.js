@@ -213,18 +213,46 @@
   var pz = document.getElementById('pdfz');
   var pzScroll = document.getElementById('pdfzScroll');
   var pzPct = document.getElementById('pdfzPct');
-  var pzCanvas = null, pzZoom = 1, PZ_MIN = 1, PZ_MAX = 5;
+  var pzCanvas = null, pzZoom = 1, PZ_MIN = 1, pzPage = null, pzBase = null, pzRid = 0, pzTimer = null, pzRW = 0;
+  var PZ_PIXELS = 16000000;   // tope de píxeles por canvas (límite seguro en móviles)
+
+  function pzMaxW() { return Math.floor(Math.sqrt(PZ_PIXELS * pzBase.width / pzBase.height)); }
+  function pzMax() {
+    var dpr = window.devicePixelRatio || 1;
+    return Math.max(2, Math.min(8, pzMaxW() / (pzScroll.clientWidth * dpr)));
+  }
 
   function pzApply(z, cx, cy) {
     if (!pzCanvas) return;
     var old = pzCanvas.getBoundingClientRect();
     var rel = { x: (pzScroll.scrollLeft + cx - pzScroll.getBoundingClientRect().left) / (old.width || 1), y: (pzScroll.scrollTop + cy - pzScroll.getBoundingClientRect().top) / (old.height || 1) };
-    pzZoom = Math.max(PZ_MIN, Math.min(PZ_MAX, z));
+    pzZoom = Math.max(PZ_MIN, Math.min(pzMax(), z));
     pzCanvas.style.width = Math.round(pzScroll.clientWidth * pzZoom) + 'px';
     pzPct.textContent = Math.round(pzZoom * 100) + '%';
     var now = pzCanvas.getBoundingClientRect();
     pzScroll.scrollLeft = rel.x * now.width - (cx - pzScroll.getBoundingClientRect().left);
     pzScroll.scrollTop = rel.y * now.height - (cy - pzScroll.getBoundingClientRect().top);
+    clearTimeout(pzTimer);
+    pzTimer = setTimeout(pzRender, 200);
+  }
+
+  // vuelve a dibujar la lámina con la resolución que pide el zoom actual (nítida, sin estirar píxeles)
+  function pzRender() {
+    if (!pzPage || pz.hidden) return;
+    var dpr = window.devicePixelRatio || 1;
+    var want = Math.min(pzMaxW(), Math.ceil(pzScroll.clientWidth * pzZoom * dpr));
+    if (pzCanvas && pzRW >= want * 0.97) return;
+    var id = ++pzRid;
+    var vp = pzPage.getViewport({ scale: want / pzBase.width });
+    var c = document.createElement('canvas');
+    c.width = Math.round(vp.width); c.height = Math.round(vp.height);
+    pzPage.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () {
+      if (id !== pzRid || pz.hidden) return;
+      c.style.width = pzCanvas ? pzCanvas.style.width : Math.round(pzScroll.clientWidth * pzZoom) + 'px';
+      if (pzCanvas) pzScroll.replaceChild(c, pzCanvas); else pzScroll.appendChild(c);
+      pzCanvas = c;
+      pzRW = c.width;
+    });
   }
   function pzCenter() { var r = pzScroll.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
 
@@ -232,23 +260,16 @@
     if (!pdfDoc) return;
     pz.hidden = false;
     pzScroll.innerHTML = '';
-    pzCanvas = null;
+    pzCanvas = null; pzPage = null; pzRW = 0; pzZoom = 1;
+    pzPct.textContent = '100%';
     pdfDoc.getPage(n).then(function (page) {
-      var base = page.getViewport({ scale: 1 });
-      var vp = page.getViewport({ scale: Math.min(3200 / base.width, 3) });
-      var c = document.createElement('canvas');
-      c.width = vp.width; c.height = vp.height;
-      return page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () {
-        if (pz.hidden) return;
-        pzCanvas = c;
-        pzScroll.appendChild(c);
-        pzZoom = 1;
-        c.style.width = pzScroll.clientWidth + 'px';
-        pzPct.textContent = '100%';
-      });
+      if (pz.hidden) return;
+      pzPage = page;
+      pzBase = page.getViewport({ scale: 1 });
+      pzRender();
     });
   }
-  function closePdfZoom() { pz.hidden = true; pzScroll.innerHTML = ''; pzCanvas = null; }
+  function closePdfZoom() { pz.hidden = true; pzScroll.innerHTML = ''; pzCanvas = null; pzPage = null; pzRid++; }
 
   document.getElementById('pdfPages').addEventListener('click', function (e) {
     var slot = e.target.closest('.pdf-page');
