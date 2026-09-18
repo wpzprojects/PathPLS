@@ -21,7 +21,7 @@
     --step-bg:#F5F5F3; --step-border:#A8A8A8;
     --card-shadow:0 3px 8px rgba(23,33,28,.12), 0 14px 32px -12px rgba(23,33,28,.24);
     --field-bg:#FFFFFF;
-    --btn-bg:#141414; --btn-border:#141414; --btn-ink:#FFFFFF; --btn-hover-bg:#262626;
+    --btn-bg:var(--accent-ink); --btn-border:var(--accent-ink); --btn-ink:#FFFFFF; --btn-hover-bg:var(--accent); --btn-hover-ink:#FFFFFF;
   }
   /* Paleta gris neutra para el admin en tema oscuro (mismos niveles de luz que el
      tema base, sin el tinte verde) — el verde queda reservado a los acentos. */
@@ -33,7 +33,7 @@
       --group-bg:var(--surface-3); --group-border:var(--line-strong);
       --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
       --field-bg:var(--surface-2);
-      --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3);
+      --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3); --btn-hover-ink:var(--accent);
     }
   }
   :root[data-theme="dark"]{
@@ -44,7 +44,7 @@
     --group-bg:var(--surface-3); --group-border:var(--line-strong);
     --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
     --field-bg:var(--surface-2);
-    --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3);
+    --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3); --btn-hover-ink:var(--accent);
   }
   body{margin:0}
   .admin-wrap{max-width:1080px;margin:0 auto;padding:24px 22px 90px}
@@ -61,7 +61,7 @@
   .admin-row .admin-field{flex:1;min-width:140px}
   .admin-actions{display:flex;gap:10px;margin-top:6px}
   .admin-btn, .admin-danger{font-family:var(--display);font-weight:700;font-size:13px;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--btn-ink)}
-  .admin-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .admin-btn:hover{background:var(--btn-hover-bg);border-color:var(--btn-hover-bg);color:var(--btn-hover-ink)}
   .admin-danger:hover{background:var(--btn-hover-bg)}
   .admin-danger.confirming{background:rgba(239,68,68,.16);color:#EF4444;border-color:#EF4444}
   .admin-status{font-family:var(--mono);font-size:12.5px;padding:8px 0;color:var(--muted)}
