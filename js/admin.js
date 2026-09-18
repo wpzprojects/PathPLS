@@ -6,6 +6,9 @@
   ];
 
   var state = { data: null, sha: null, panel: 'plscadd' };
+  // vista previa local de imágenes recién subidas (la ruta de GitHub tarda en
+  // estar disponible en el sitio publicado, así que mostramos el archivo local)
+  var localPreviews = {};
 
   var els = {
     token: document.getElementById('token'),
@@ -249,18 +252,20 @@
 
   function renderThumbsHtml(step, gi, si) {
     return (step.images || []).map(function (img, idx) {
-      return '<div class="admin-img-thumb"><img src="' + esc(img) + '" alt="" loading="lazy">' +
+      var src = localPreviews[img] || img;
+      return '<div class="admin-img-thumb" draggable="true" data-idx="' + idx + '"><img src="' + esc(src) + '" alt="" loading="lazy">' +
         '<button type="button" class="admin-img-del" data-action="del-image" data-gi="' + gi + '" data-si="' + si + '" data-idx="' + idx + '" title="Eliminar imagen">&times;</button></div>';
     }).join('');
   }
 
   function renderImagesField(step, gi, si) {
-    return '<div class="admin-images" data-gi="' + gi + '" data-si="' + si + '" tabindex="0" title="Pega aquí una captura (Ctrl+V)">' +
+    return '<div class="admin-images" data-gi="' + gi + '" data-si="' + si + '" tabindex="0">' +
       renderThumbsHtml(step, gi, si) +
       '<label class="admin-img-add" title="Subir imagen">' +
       '<input type="file" accept="image/*" data-action="upload-image" data-gi="' + gi + '" data-si="' + si + '">+</label>' +
       '<span class="admin-upload-status"></span>' +
-      '</div>';
+      '</div>' +
+      '<p class="admin-images-hint">+ para cargar imagen o arrastra una imagen en este campo</p>';
   }
 
   // Vuelve a pintar solo las miniaturas de un campo de imágenes (tras subir o eliminar),
@@ -333,6 +338,7 @@
         var step = stepAt(gi, si);
         step.images = step.images || [];
         step.images.push(path);
+        localPreviews[path] = URL.createObjectURL(file);
         statusEl.textContent = 'Subida: ' + path; statusEl.className = 'admin-upload-status ok';
         refreshThumbs(gi, si);
       }).catch(function (err) {
@@ -374,6 +380,55 @@
     var item = arr.splice(from, 1)[0];
     arr.splice(to, 0, item);
   }
+
+  // arrastrar una miniatura reordena las imágenes del paso; arrastrar un
+  // archivo desde el explorador lo sube, igual que el botón "+"
+  els.editor.addEventListener('dragstart', function (e) {
+    var thumb = e.target.closest && e.target.closest('.admin-img-thumb');
+    if (!thumb) return;
+    e.dataTransfer.setData('text/x-thumb-idx', thumb.dataset.idx);
+    e.dataTransfer.effectAllowed = 'move';
+    thumb.classList.add('dragging');
+  });
+  els.editor.addEventListener('dragend', function (e) {
+    var thumb = e.target.closest && e.target.closest('.admin-img-thumb');
+    if (thumb) thumb.classList.remove('dragging');
+  });
+  els.editor.addEventListener('dragover', function (e) {
+    var container = e.target.closest && e.target.closest('.admin-images');
+    if (!container) return;
+    e.preventDefault();
+    container.classList.add('drop-active');
+  });
+  els.editor.addEventListener('dragleave', function (e) {
+    var container = e.target.closest && e.target.closest('.admin-images');
+    if (!container || container.contains(e.relatedTarget)) return;
+    container.classList.remove('drop-active');
+  });
+  els.editor.addEventListener('drop', function (e) {
+    var container = e.target.closest && e.target.closest('.admin-images');
+    if (!container) return;
+    e.preventDefault();
+    container.classList.remove('drop-active');
+    var gi = +container.dataset.gi, si = +container.dataset.si;
+
+    var files = e.dataTransfer.files;
+    if (files && files.length) {
+      var file = Array.prototype.slice.call(files).filter(function (f) { return f.type && f.type.indexOf('image/') === 0; })[0];
+      if (file) uploadImageFile(file, gi, si, container.querySelector('.admin-upload-status'));
+      return;
+    }
+
+    var fromIdx = e.dataTransfer.getData('text/x-thumb-idx');
+    if (fromIdx === '') return;
+    fromIdx = +fromIdx;
+    var step = stepAt(gi, si);
+    var targetThumb = e.target.closest && e.target.closest('.admin-img-thumb');
+    var toIdx = targetThumb ? +targetThumb.dataset.idx : step.images.length - 1;
+    if (fromIdx === toIdx) return;
+    moveItem(step.images, fromIdx, toIdx);
+    refreshThumbs(gi, si);
+  });
 
   function newStep() { return { _cid: newCid(), title: 'Nuevo paso', sub: false, route: null, comment: '', commentList: null, images: [] }; }
 

@@ -92,9 +92,12 @@
   .admin-insert-zone{position:relative;height:26px;margin:6px 0}
   .admin-insert-zone button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;padding:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:20px;line-height:1;cursor:pointer;opacity:.45;transition:opacity .15s ease,border-color .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center}
   .admin-insert-zone:hover button{opacity:1;border-color:var(--accent);color:var(--accent)}
-  .admin-images{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:5px;width:100%;box-sizing:border-box;height:55px;background:var(--field-bg);border:1px solid var(--line-strong);border-radius:7px;overflow-x:auto}
-  .admin-img-thumb{position:relative;flex:none;width:43px;height:43px;border-radius:5px;overflow:hidden;background:var(--surface-3)}
-  .admin-img-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .admin-images{display:flex;align-items:center;gap:6px;margin-bottom:2px;padding:5px;width:100%;box-sizing:border-box;height:55px;background:var(--field-bg);border:1px solid var(--line-strong);border-radius:7px;overflow-x:auto;transition:border-color .12s ease,background .12s ease}
+  .admin-images.drop-active{border-color:var(--accent);background:var(--accent-soft)}
+  .admin-images-hint{margin:0 0 8px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .admin-img-thumb{position:relative;flex:none;width:43px;height:43px;border-radius:5px;overflow:hidden;background:var(--surface-3);cursor:grab}
+  .admin-img-thumb.dragging{opacity:.35}
+  .admin-img-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
   .admin-img-del{position:absolute;top:2px;right:2px;width:16px;height:16px;padding:0;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .12s ease,background .12s ease}
   .admin-img-thumb:hover .admin-img-del, .admin-img-del.confirming{opacity:1}
   .admin-img-del.confirming{background:#EF4444}
