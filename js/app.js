@@ -176,6 +176,7 @@
 
   // ---------- visor de PDF (pestaña Workflow) ----------
   var pdfStarted = false;
+  var pdfDoc = null;
   function initPdf() {
     if (pdfStarted) return;
     pdfStarted = true;
@@ -187,6 +188,7 @@
     s.onload = function () {
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdf.worker.min.js';
       pdfjsLib.getDocument('assets/docs/PLS-CADD_Workflow.pdf').promise.then(function (pdf) {
+        pdfDoc = pdf;
         box.innerHTML = '';
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) {
@@ -206,6 +208,79 @@
     };
     document.head.appendChild(s);
   }
+
+  // zoom a pantalla completa de una lámina
+  var pz = document.getElementById('pdfz');
+  var pzScroll = document.getElementById('pdfzScroll');
+  var pzPct = document.getElementById('pdfzPct');
+  var pzCanvas = null, pzZoom = 1, PZ_MIN = 1, PZ_MAX = 5;
+
+  function pzApply(z, cx, cy) {
+    if (!pzCanvas) return;
+    var old = pzCanvas.getBoundingClientRect();
+    var rel = { x: (pzScroll.scrollLeft + cx - pzScroll.getBoundingClientRect().left) / (old.width || 1), y: (pzScroll.scrollTop + cy - pzScroll.getBoundingClientRect().top) / (old.height || 1) };
+    pzZoom = Math.max(PZ_MIN, Math.min(PZ_MAX, z));
+    pzCanvas.style.width = Math.round(pzScroll.clientWidth * pzZoom) + 'px';
+    pzPct.textContent = Math.round(pzZoom * 100) + '%';
+    var now = pzCanvas.getBoundingClientRect();
+    pzScroll.scrollLeft = rel.x * now.width - (cx - pzScroll.getBoundingClientRect().left);
+    pzScroll.scrollTop = rel.y * now.height - (cy - pzScroll.getBoundingClientRect().top);
+  }
+  function pzCenter() { var r = pzScroll.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+
+  function openPdfZoom(n) {
+    if (!pdfDoc) return;
+    pz.hidden = false;
+    pzScroll.innerHTML = '';
+    pzCanvas = null;
+    pdfDoc.getPage(n).then(function (page) {
+      var base = page.getViewport({ scale: 1 });
+      var vp = page.getViewport({ scale: Math.min(3200 / base.width, 3) });
+      var c = document.createElement('canvas');
+      c.width = vp.width; c.height = vp.height;
+      return page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(function () {
+        if (pz.hidden) return;
+        pzCanvas = c;
+        pzScroll.appendChild(c);
+        pzZoom = 1;
+        c.style.width = pzScroll.clientWidth + 'px';
+        pzPct.textContent = '100%';
+      });
+    });
+  }
+  function closePdfZoom() { pz.hidden = true; pzScroll.innerHTML = ''; pzCanvas = null; }
+
+  document.getElementById('pdfPages').addEventListener('click', function (e) {
+    var slot = e.target.closest('.pdf-page');
+    if (slot && slot.querySelector('canvas')) openPdfZoom(+slot.dataset.n);
+  });
+  document.getElementById('pdfzIn').addEventListener('click', function () { var c = pzCenter(); pzApply(pzZoom * 1.35, c.x, c.y); });
+  document.getElementById('pdfzOut').addEventListener('click', function () { var c = pzCenter(); pzApply(pzZoom / 1.35, c.x, c.y); });
+  document.getElementById('pdfzClose').addEventListener('click', closePdfZoom);
+  pzScroll.addEventListener('dblclick', function (e) { pzApply(pzZoom > 1.05 ? 1 : 2.5, e.clientX, e.clientY); });
+  pzScroll.addEventListener('wheel', function (e) {
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    pzApply(pzZoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX, e.clientY);
+  }, { passive: false });
+  var drag = null;
+  pzScroll.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    drag = { x: e.clientX, y: e.clientY, l: pzScroll.scrollLeft, t: pzScroll.scrollTop };
+    pzScroll.classList.add('dragging');
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    pzScroll.scrollLeft = drag.l - (e.clientX - drag.x);
+    pzScroll.scrollTop = drag.t - (e.clientY - drag.y);
+  });
+  window.addEventListener('pointerup', function () { drag = null; pzScroll.classList.remove('dragging'); });
+  document.addEventListener('keydown', function (e) {
+    if (pz.hidden) return;
+    if (e.key === 'Escape') closePdfZoom();
+    if (e.key === '+' || e.key === '=') document.getElementById('pdfzIn').click();
+    if (e.key === '-') document.getElementById('pdfzOut').click();
+  });
 
   function renderPdfPage(pdf, slot) {
     pdf.getPage(+slot.dataset.n).then(function (page) {
