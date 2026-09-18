@@ -231,7 +231,7 @@
       '<div class="admin-group-desc-wrap"><textarea data-field="gdesc" placeholder="Descripción del grupo" rows="1">' + esc(group.desc) + '</textarea></div>' +
       '</div>' +
       '<div class="admin-steps">' + stepsHtml + '</div>' +
-      '<button type="button" class="admin-btn" data-action="add-step">+ Agregar paso</button>' +
+      '<div class="admin-insert-zone"><button type="button" title="Agregar paso al final" data-action="add-step">+</button></div>' +
       '</div>';
   }
 
