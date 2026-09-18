@@ -76,12 +76,13 @@
   .admin-group-title{flex:1;min-width:160px;font-weight:800!important;font-size:17px!important;font-family:var(--display)!important;margin-bottom:0!important}
   .admin-group textarea[data-field="gdesc"]{margin-top:8px}
   .admin-move{display:flex;gap:6px;flex:none;flex-wrap:nowrap}
-  .admin-move button{flex:none;white-space:nowrap;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;padding:0 10px;font-family:var(--display);font-size:12.5px;font-weight:700}
+  .admin-move button{flex:none;white-space:nowrap;height:30px;border-radius:6px;border:1px solid var(--accent);background:var(--surface-2);color:var(--accent);cursor:pointer;padding:0 10px;font-family:var(--display);font-size:12.5px;font-weight:700;transition:background .15s ease,color .15s ease}
+  .admin-move button:not(.admin-danger):not(:disabled):hover{background:var(--accent);color:#fff}
   .admin-move .admin-danger{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-border)}
   .admin-move .admin-danger:hover{background:var(--btn-hover-bg);color:var(--btn-ink)}
   .admin-move .admin-danger.confirming{background:rgba(239,68,68,.16);color:#EF4444;border-color:#EF4444}
   .admin-move button[data-action^="up-"], .admin-move button[data-action^="down-"]{width:30px;padding:0}
-  .admin-move button:disabled{opacity:.35;cursor:default}
+  .admin-move button:disabled{opacity:.35;cursor:default;background:var(--surface-2);color:var(--accent)}
   .admin-move .admin-danger{width:auto}
   .admin-steps{display:flex;flex-direction:column;margin:12px 0}
   .admin-step{background:var(--step-bg);border:1px solid var(--step-border);border-radius:7px;padding:10px 12px;position:relative;box-shadow:var(--card-shadow, none)}
@@ -93,8 +94,8 @@
   .admin-back:hover{opacity:1;text-decoration:underline}
   .admin-group-desc-wrap{margin-left:62px}
   .admin-insert-zone{position:relative;height:26px;margin:6px 0}
-  .admin-insert-zone button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;padding:0;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:20px;line-height:1;cursor:pointer;opacity:.45;transition:opacity .15s ease,border-color .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center}
-  .admin-insert-zone:hover button{opacity:1;border-color:var(--accent);color:var(--accent)}
+  .admin-insert-zone button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;padding:0;border-radius:50%;border:1px solid var(--accent);background:var(--surface);color:var(--accent);font-size:20px;line-height:1;cursor:pointer;transition:background .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center}
+  .admin-insert-zone:hover button{background:var(--accent);color:#fff}
   .admin-images{display:flex;align-items:center;gap:6px;margin-bottom:2px;padding:5px;width:100%;box-sizing:border-box;height:55px;background:var(--field-bg);border:1px solid var(--line-strong);border-radius:7px;overflow-x:auto;transition:border-color .12s ease,background .12s ease}
   .admin-images.drop-active{border-color:var(--accent);background:var(--accent-soft)}
   .admin-images-hint{margin:0 0 8px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
