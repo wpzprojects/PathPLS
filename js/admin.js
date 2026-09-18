@@ -265,7 +265,7 @@
       '<input type="file" accept="image/*" data-action="upload-image" data-gi="' + gi + '" data-si="' + si + '">+</label>' +
       '<span class="admin-upload-status"></span>' +
       '</div>' +
-      '<p class="admin-images-hint">+ para cargar imagen o arrastra una imagen en este campo</p>';
+      '<p class="admin-images-hint">+ para cargar imagen, o arrastra o pega una imagen en este campo</p>';
   }
 
   // Vuelve a pintar solo las miniaturas de un campo de imágenes (tras subir o eliminar),
