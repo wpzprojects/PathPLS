@@ -20,7 +20,7 @@
     --group-bg:#FFFFFF; --group-border:var(--line);
     --step-bg:#F5F5F3; --step-border:#A8A8A8;
     --card-shadow:0 3px 8px rgba(23,33,28,.12), 0 14px 32px -12px rgba(23,33,28,.24);
-    --field-bg:#FFFFFF;
+    --field-bg:#FFFFFF; --step-field-bg:var(--field-bg);
     --btn-bg:var(--accent-ink); --btn-border:var(--accent-ink); --btn-ink:#FFFFFF; --btn-hover-bg:var(--accent); --btn-hover-ink:#FFFFFF;
     --group-top-bg:color-mix(in srgb, var(--accent-soft) 72%, var(--accent) 28%);
     --move-border:var(--accent); --move-color:var(--accent); --move-hover-bg:var(--accent); --move-hover-ink:#FFFFFF;
@@ -34,7 +34,7 @@
       --line:#3B3B3B; --line-strong:#505050;
       --group-bg:var(--surface-3); --group-border:var(--line-strong);
       --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
-      --field-bg:var(--surface-2);
+      --field-bg:var(--surface-2); --step-field-bg:var(--step-bg);
       --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3); --btn-hover-ink:var(--accent);
       --group-top-bg:color-mix(in srgb, var(--accent-soft) 78%, var(--accent) 22%);
       --move-border:var(--line-strong); --move-color:var(--ink); --move-hover-bg:var(--surface-2); --move-hover-ink:var(--ink);
@@ -47,7 +47,7 @@
     --card-shadow:0 4px 10px rgba(0,0,0,.55), 0 18px 40px -14px rgba(0,0,0,.85);
     --group-bg:var(--surface-3); --group-border:var(--line-strong);
     --step-bg:color-mix(in srgb, #2E2E2E 85%, black 15%); --step-border:#8A8A8A;
-    --field-bg:var(--surface-2);
+    --field-bg:var(--surface-2); --step-field-bg:var(--step-bg);
     --btn-bg:var(--surface-2); --btn-border:var(--line-strong); --btn-ink:var(--ink); --btn-hover-bg:var(--surface-3); --btn-hover-ink:var(--accent);
     --group-top-bg:color-mix(in srgb, var(--accent-soft) 78%, var(--accent) 22%);
     --move-border:var(--line-strong); --move-color:var(--ink); --move-hover-bg:var(--surface-2); --move-hover-ink:var(--ink);
@@ -62,6 +62,7 @@
     width:100%;box-sizing:border-box;font-family:var(--body);font-size:14.5px;color:var(--ink);background:var(--field-bg);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;margin-bottom:8px
   }
   .admin-card textarea, .admin-group textarea, .admin-step textarea{resize:vertical}
+  .admin-step input:not([type="checkbox"]), .admin-step textarea, .admin-step .admin-images:not(.drop-active){background:var(--step-field-bg)}
   .admin-sub input[type="checkbox"]{flex:none;width:15px;height:15px;margin:0;accent-color:var(--accent)}
   .admin-actions{display:flex;gap:10px;margin-top:6px}
   .admin-btn, .admin-danger{font-family:var(--display);font-weight:700;font-size:13px;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--btn-ink)}
