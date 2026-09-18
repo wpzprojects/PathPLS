@@ -220,6 +220,7 @@
       return html;
     }).join('');
     return '<div class="admin-group" data-gi="' + gi + '" data-cid="' + group._cid + '">' +
+      '<div class="admin-group-top">' +
       '<div class="admin-group-head">' +
       '<span class="admin-group-tag">Grupo</span>' +
       '<input data-field="gtitle" class="admin-group-title" value="' + esc(group.title) + '" placeholder="Título del grupo">' +
@@ -229,6 +230,7 @@
       '<button type="button" class="admin-danger" data-action="del-group">Eliminar grupo</button>' +
       '</div></div>' +
       '<div class="admin-group-desc-wrap"><textarea data-field="gdesc" placeholder="Descripción del grupo" rows="1">' + esc(group.desc) + '</textarea></div>' +
+      '</div>' +
       '<div class="admin-steps">' + stepsHtml + '</div>' +
       '<button type="button" class="admin-btn" data-action="add-step">+ Agregar paso</button>' +
       '</div>';
