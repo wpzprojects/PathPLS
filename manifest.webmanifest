@@ -1,6 +1,6 @@
 {
-  "name": "Paso a paso PLS-CADD",
-  "short_name": "PLS Guía",
+  "name": "Guía PLS",
+  "short_name": "Guía PLS",
   "description": "Guía paso a paso para el modelado de líneas de transmisión en PLS-CADD y PLS-POLE.",
   "start_url": "./index.html",
   "scope": "./",
