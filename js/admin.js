@@ -87,10 +87,6 @@
     if (step.commentList && step.commentList.length) return step.commentList.map(function (l) { return '- ' + l; }).join('\n');
     return step.comment || '';
   }
-  function imagesToText(step) { return (step.images || []).join(', '); }
-  function parseImagesText(text) {
-    return text.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-  }
 
   // ---------- carga desde GitHub ----------
   els.loadBtn.addEventListener('click', function () {
@@ -247,9 +243,35 @@
       '<input data-field="title" value="' + esc(step.title) + '" placeholder="Título del paso">' +
       '<textarea data-field="route" placeholder="Ruta de menú (una línea por opción; empieza con &quot;o &quot; para ruta alternativa)" rows="2">' + esc(routeToText(step.route)) + '</textarea>' +
       '<textarea data-field="comment" placeholder="Comentario (usa líneas que empiecen con &quot;- &quot; para lista de viñetas)" rows="2">' + esc(commentToText(step)) + '</textarea>' +
-      '<input data-field="images" value="' + esc(imagesToText(step)) + '" placeholder="Rutas de imagen, o pega aquí una captura (Ctrl+V)">' +
-      '<div class="admin-file-upload"><input type="file" accept="image/*" data-action="upload-image" data-gi="' + gi + '" data-si="' + si + '"><span class="admin-upload-status"></span></div>' +
+      renderImagesField(step, gi, si) +
       '</div>';
+  }
+
+  function renderThumbsHtml(step, gi, si) {
+    return (step.images || []).map(function (img, idx) {
+      return '<div class="admin-img-thumb"><img src="' + esc(img) + '" alt="" loading="lazy">' +
+        '<button type="button" class="admin-img-del" data-action="del-image" data-gi="' + gi + '" data-si="' + si + '" data-idx="' + idx + '" title="Eliminar imagen">&times;</button></div>';
+    }).join('');
+  }
+
+  function renderImagesField(step, gi, si) {
+    return '<div class="admin-images" data-gi="' + gi + '" data-si="' + si + '" tabindex="0" title="Pega aquí una captura (Ctrl+V)">' +
+      renderThumbsHtml(step, gi, si) +
+      '<label class="admin-img-add" title="Subir imagen">' +
+      '<input type="file" accept="image/*" data-action="upload-image" data-gi="' + gi + '" data-si="' + si + '">+</label>' +
+      '<span class="admin-upload-status"></span>' +
+      '</div>';
+  }
+
+  // Vuelve a pintar solo las miniaturas de un campo de imágenes (tras subir o eliminar),
+  // sin re-renderizar todo el panel, para no perder el foco en otros campos.
+  function refreshThumbs(gi, si) {
+    var container = els.editor.querySelector('.admin-images[data-gi="' + gi + '"][data-si="' + si + '"]');
+    if (!container) return;
+    var step = stepAt(gi, si);
+    var addLabel = container.querySelector('.admin-img-add');
+    container.innerHTML = renderThumbsHtml(step, gi, si) + addLabel.outerHTML +
+      '<span class="' + container.querySelector('.admin-upload-status').className + '">' + esc(container.querySelector('.admin-upload-status').textContent) + '</span>';
   }
 
   // ---------- edición de campos (sin re-render, para no perder foco) ----------
@@ -266,7 +288,6 @@
       if (field === 'title') step.title = t.value;
       else if (field === 'route') step.route = parseRouteText(t.value);
       else if (field === 'comment') { var c = parseCommentText(t.value); step.comment = c.comment; step.commentList = c.commentList; }
-      else if (field === 'images') step.images = parseImagesText(t.value);
       return;
     }
     var groupEl = t.closest('[data-gi]');
@@ -287,7 +308,7 @@
     return btoa(binary);
   }
 
-  function uploadImageFile(file, gi, si, statusEl, imgInput) {
+  function uploadImageFile(file, gi, si, statusEl) {
     if (!els.token.value.trim()) { statusEl.textContent = 'Falta el token de GitHub.'; statusEl.className = 'admin-upload-status err'; return; }
     statusEl.textContent = 'Subiendo…'; statusEl.className = 'admin-upload-status';
     var reader = new FileReader();
@@ -313,7 +334,7 @@
         step.images = step.images || [];
         step.images.push(path);
         statusEl.textContent = 'Subida: ' + path; statusEl.className = 'admin-upload-status ok';
-        imgInput.value = imagesToText(step);
+        refreshThumbs(gi, si);
       }).catch(function (err) {
         statusEl.textContent = 'Error: ' + err.message; statusEl.className = 'admin-upload-status err';
       });
@@ -327,24 +348,22 @@
     var file = t.files && t.files[0];
     if (!file) return;
     var gi = +t.dataset.gi, si = +t.dataset.si;
-    var statusEl = t.parentElement.querySelector('.admin-upload-status');
-    var imgInput = t.closest('.admin-step').querySelector('[data-field="images"]');
-    uploadImageFile(file, gi, si, statusEl, imgInput);
+    var statusEl = t.closest('.admin-images').querySelector('.admin-upload-status');
+    uploadImageFile(file, gi, si, statusEl);
   });
 
   // pegar una captura de pantalla (Ctrl+V) directamente en el campo de imágenes
   els.editor.addEventListener('paste', function (e) {
-    var t = e.target;
-    if (!t.matches || !t.matches('[data-field="images"]')) return;
+    var t = e.target.closest ? e.target.closest('.admin-images') : null;
+    if (!t) return;
     var items = (e.clipboardData || window.clipboardData || {}).items || [];
     for (var i = 0; i < items.length; i++) {
       if (items[i].type && items[i].type.indexOf('image/') === 0) {
         e.preventDefault();
         var file = items[i].getAsFile();
-        var stepEl = t.closest('[data-si]');
-        var gi = +stepEl.dataset.gi, si = +stepEl.dataset.si;
-        var statusEl = stepEl.querySelector('.admin-upload-status');
-        uploadImageFile(file, gi, si, statusEl, t);
+        var gi = +t.dataset.gi, si = +t.dataset.si;
+        var statusEl = t.querySelector('.admin-upload-status');
+        uploadImageFile(file, gi, si, statusEl);
         break;
       }
     }
@@ -387,6 +406,15 @@
     if (action === 'insert-step') {
       var gi0 = +b.dataset.gi, at = +b.dataset.at;
       withFlip(function () { groups[gi0].steps.splice(at, 0, newStep()); renderPanel(); });
+      return;
+    }
+    if (action === 'del-image') {
+      var giImg = +b.dataset.gi, siImg = +b.dataset.si, idxImg = +b.dataset.idx;
+      confirmThenRun(b, '×', function () {
+        var step = stepAt(giImg, siImg);
+        step.images.splice(idxImg, 1);
+        refreshThumbs(giImg, siImg);
+      });
       return;
     }
     var groupEl = b.closest('[data-gi]');
