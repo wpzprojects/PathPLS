@@ -5,6 +5,13 @@
     { id: 'plspole', label: 'PLS-POLE' }
   ];
 
+  // Repo de GitHub: siempre es este mismo sitio, así que va fijo en vez de
+  // pedirlo en el formulario.
+  var GH_OWNER = 'wpzprojects';
+  var GH_REPO = 'PathPLS';
+  var GH_BRANCH = 'main';
+  var GH_PATH = 'steps.json';
+
   var state = { data: null, sha: null, panel: 'plscadd' };
   // vista previa local de imágenes recién subidas (la ruta de GitHub tarda en
   // estar disponible en el sitio publicado, así que mostramos el archivo local)
@@ -12,10 +19,6 @@
 
   var els = {
     token: document.getElementById('token'),
-    owner: document.getElementById('owner'),
-    repo: document.getElementById('repo'),
-    branch: document.getElementById('branch'),
-    path: document.getElementById('path'),
     loadBtn: document.getElementById('loadBtn'),
     saveBtn: document.getElementById('saveBtn'),
     status: document.getElementById('status'),
@@ -25,15 +28,11 @@
   };
 
   // ---------- persistencia local de config (nunca se envía a ningún lado salvo GitHub) ----------
-  ['token', 'owner', 'repo', 'branch', 'path'].forEach(function (k) {
+  ['token'].forEach(function (k) {
     var saved = localStorage.getItem('gh_admin_' + k);
     if (saved) els[k].value = saved;
     els[k].addEventListener('input', function () { localStorage.setItem('gh_admin_' + k, els[k].value); });
   });
-  if (!els.owner.value) els.owner.value = 'wpzprojects';
-  if (!els.repo.value) els.repo.value = 'PathPLS';
-  if (!els.branch.value) els.branch.value = 'main';
-  if (!els.path.value) els.path.value = 'steps.json';
 
   function setStatus(msg, kind) {
     els.status.textContent = msg;
@@ -58,8 +57,8 @@
   }
 
   function apiUrl() {
-    return 'https://api.github.com/repos/' + els.owner.value.trim() + '/' + els.repo.value.trim() +
-      '/contents/' + els.path.value.trim() + '?ref=' + encodeURIComponent(els.branch.value.trim());
+    return 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO +
+      '/contents/' + GH_PATH + '?ref=' + encodeURIComponent(GH_BRANCH);
   }
 
   // ---------- parsing texto <-> estructura ----------
@@ -122,7 +121,7 @@
       message: msg,
       content: toBase64(JSON.stringify(stripCids(state.data), null, 2)),
       sha: state.sha,
-      branch: els.branch.value.trim()
+      branch: GH_BRANCH
     };
     fetch(apiUrl().split('?')[0], {
       method: 'PUT',
@@ -324,7 +323,7 @@
       var ext = (file.name && file.name.match(/\.[a-zA-Z0-9]+$/) || ['.png'])[0].toLowerCase();
       var filename = 'upload-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + ext;
       var path = 'assets/img/' + filename;
-      var url = 'https://api.github.com/repos/' + els.owner.value.trim() + '/' + els.repo.value.trim() + '/contents/' + path;
+      var url = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + path;
       fetch(url, {
         method: 'PUT',
         headers: {
@@ -332,7 +331,7 @@
           'Accept': 'application/vnd.github+json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: 'Subir imagen ' + filename, content: toBase64Raw(bytes), branch: els.branch.value.trim() })
+        body: JSON.stringify({ message: 'Subir imagen ' + filename, content: toBase64Raw(bytes), branch: GH_BRANCH })
       }).then(function (r) {
         if (!r.ok) return r.json().then(function (j) { throw new Error((j && j.message) || ('HTTP ' + r.status)); });
         return r.json();
