@@ -14,9 +14,10 @@
   .admin-card h2{font-size:16px;margin:0 0 10px}
   .admin-field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
   .admin-field label{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-  .admin-card input, .admin-card textarea, .admin-group input, .admin-group textarea, .admin-step input, .admin-step textarea{
+  .admin-card input:not([type="checkbox"]), .admin-card textarea, .admin-group input:not([type="checkbox"]), .admin-group textarea, .admin-step input:not([type="checkbox"]), .admin-step textarea{
     width:100%;box-sizing:border-box;font-family:var(--body);font-size:14.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;margin-bottom:8px
   }
+  .admin-sub input[type="checkbox"]{flex:none;width:15px;height:15px;margin:0;accent-color:var(--accent)}
   .admin-row{display:flex;gap:10px;flex-wrap:wrap}
   .admin-row .admin-field{flex:1;min-width:140px}
   .admin-actions{display:flex;gap:10px;margin-top:6px}
@@ -30,16 +31,22 @@
   #tabsAdmin{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
   #tabsAdmin .tab{padding:8px 14px;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;font-family:var(--display);font-weight:700;font-size:14px}
   #tabsAdmin .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
-  .admin-group{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:16px;box-shadow:var(--shadow)}
-  .admin-group-head{display:flex;gap:10px;align-items:flex-start}
-  .admin-group-head input{flex:1;font-weight:700}
-  .admin-move{display:flex;gap:6px;flex:none}
-  .admin-move button{width:30px;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer}
+  .admin-group{background:var(--surface-3);border:1px solid var(--accent);border-radius:10px;padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
+  .admin-group-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .admin-group-tag{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:5px;padding:4px 8px}
+  .admin-group-title{flex:1;min-width:160px;font-weight:800!important;font-size:17px!important;font-family:var(--display)!important;margin-bottom:0!important}
+  .admin-group textarea[data-field="gdesc"]{margin-top:8px}
+  .admin-move{display:flex;gap:6px;flex:none;flex-wrap:nowrap}
+  .admin-move button{flex:none;white-space:nowrap;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;padding:0 10px;font-family:var(--display);font-size:12.5px;font-weight:700}
+  .admin-move button[data-action^="up-"], .admin-move button[data-action^="down-"]{width:30px;padding:0}
   .admin-move button:disabled{opacity:.35;cursor:default}
-  .admin-steps{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+  .admin-move .admin-danger{width:auto}
+  .admin-steps{display:flex;flex-direction:column;gap:10px;margin:12px 0}
   .admin-step{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:10px 12px}
-  .admin-step-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-  .admin-sub{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+  .admin-step-row{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+  .admin-step-num{flex:none;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:5px;min-width:22px;text-align:center;padding:3px 0}
+  .admin-sub{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);flex:none;cursor:pointer}
+  .admin-step-row .admin-move{margin-left:auto}
   .masthead .brand small{display:block;font-size:9px;letter-spacing:.1em;opacity:.7;text-transform:none}
   .admin-back{margin-right:16px;font-family:var(--display);font-weight:700;font-size:13px;color:#EDF3EF;text-decoration:none;opacity:.85}
   .admin-back:hover{opacity:1;text-decoration:underline}

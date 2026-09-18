@@ -162,18 +162,23 @@
 
   function renderPanel() {
     var groups = state.data[state.panel] || [];
-    els.editor.innerHTML = groups.map(function (g, gi) { return renderGroupEditor(g, gi, groups.length); }).join('') +
+    var counter = { n: 0 };
+    els.editor.innerHTML = groups.map(function (g, gi) { return renderGroupEditor(g, gi, groups.length, counter); }).join('') +
       '<button type="button" class="admin-btn" data-action="add-group">+ Agregar grupo</button>';
   }
 
-  function renderGroupEditor(group, gi, groupCount) {
-    var stepsHtml = group.steps.map(function (s, si) { return renderStepEditor(s, gi, si, group.steps.length); }).join('');
+  function renderGroupEditor(group, gi, groupCount, counter) {
+    var stepsHtml = group.steps.map(function (s, si) {
+      if (!s.sub) counter.n++;
+      return renderStepEditor(s, gi, si, group.steps.length, s.sub ? '·' : counter.n);
+    }).join('');
     return '<div class="admin-group" data-gi="' + gi + '">' +
       '<div class="admin-group-head">' +
-      '<input data-field="gtitle" value="' + esc(group.title) + '" placeholder="Título del grupo">' +
+      '<span class="admin-group-tag">Grupo</span>' +
+      '<input data-field="gtitle" class="admin-group-title" value="' + esc(group.title) + '" placeholder="Título del grupo">' +
       '<div class="admin-move">' +
-      '<button type="button" data-action="up-group" ' + (gi === 0 ? 'disabled' : '') + '>▲</button>' +
-      '<button type="button" data-action="down-group" ' + (gi === groupCount - 1 ? 'disabled' : '') + '>▼</button>' +
+      '<button type="button" title="Subir grupo" data-action="up-group" ' + (gi === 0 ? 'disabled' : '') + '>▲</button>' +
+      '<button type="button" title="Bajar grupo" data-action="down-group" ' + (gi === groupCount - 1 ? 'disabled' : '') + '>▼</button>' +
       '<button type="button" class="admin-danger" data-action="del-group">Eliminar grupo</button>' +
       '</div></div>' +
       '<textarea data-field="gdesc" placeholder="Descripción del grupo" rows="1">' + esc(group.desc) + '</textarea>' +
@@ -182,10 +187,12 @@
       '</div>';
   }
 
-  function renderStepEditor(step, gi, si, stepCount) {
+  function renderStepEditor(step, gi, si, stepCount, displayNum) {
     return '<div class="admin-step" data-gi="' + gi + '" data-si="' + si + '">' +
       '<div class="admin-step-row">' +
-      '<label class="admin-sub"><input type="checkbox" data-field="sub" ' + (step.sub ? 'checked' : '') + '> Sin numerar</label>' +
+      '<span class="admin-step-num" title="Número con el que se mostrará este paso">' + displayNum + '</span>' +
+      '<label class="admin-sub" title="El paso no tendrá número propio; se mostrará con un punto (·), para acciones secundarias que no siguen la secuencia principal">' +
+      '<input type="checkbox" data-field="sub" ' + (step.sub ? 'checked' : '') + '> Paso secundario (sin número)</label>' +
       '<div class="admin-move">' +
       '<button type="button" data-action="up-step" ' + (si === 0 ? 'disabled' : '') + '>▲</button>' +
       '<button type="button" data-action="down-step" ' + (si === stepCount - 1 ? 'disabled' : '') + '>▼</button>' +
@@ -229,6 +236,7 @@
       var stepEl = t.closest('[data-si]');
       var gi = +stepEl.dataset.gi, si = +stepEl.dataset.si;
       stepAt(gi, si).sub = t.checked;
+      renderPanel();
     }
   });
 
