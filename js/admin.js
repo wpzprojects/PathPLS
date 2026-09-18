@@ -376,6 +376,23 @@
     }
   });
 
+  // doble clic en una miniatura la abre ampliada (mismo visor que la guía)
+  var lb = document.getElementById('lb');
+  var lbimg = document.getElementById('lbimg');
+  function closeLb() { lb.hidden = true; lbimg.removeAttribute('src'); }
+  els.editor.addEventListener('dblclick', function (e) {
+    var img = e.target.closest && e.target.closest('.admin-img-thumb');
+    if (!img || e.target.closest('.admin-img-del')) return;
+    lbimg.src = img.querySelector('img').src;
+    lb.hidden = false;
+  });
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb || e.target.id === 'lbclose') closeLb();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !lb.hidden) closeLb();
+  });
+
   // ---------- acciones (agregar/eliminar/mover) ----------
   function moveItem(arr, from, to) {
     var item = arr.splice(from, 1)[0];
