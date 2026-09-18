@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Guía PLS · Admin</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  body{margin:0}
+  .admin-wrap{max-width:860px;margin:0 auto;padding:24px 22px 60px}
+  .admin-card{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:20px;box-shadow:var(--shadow)}
+  .admin-card h2{font-size:16px;margin:0 0 10px}
+  .admin-field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+  .admin-field label{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .admin-card input, .admin-card textarea, .admin-group input, .admin-group textarea, .admin-step input, .admin-step textarea{
+    width:100%;box-sizing:border-box;font-family:var(--body);font-size:14.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;margin-bottom:8px
+  }
+  .admin-row{display:flex;gap:10px;flex-wrap:wrap}
+  .admin-row .admin-field{flex:1;min-width:140px}
+  .admin-actions{display:flex;gap:10px;margin-top:6px}
+  .admin-btn, .admin-danger{font-family:var(--display);font-weight:700;font-size:13px;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink)}
+  .admin-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .admin-danger{border-color:var(--flag);color:var(--flag);background:none}
+  .admin-danger:hover{background:var(--flag-soft)}
+  .admin-status{font-family:var(--mono);font-size:12.5px;padding:8px 0;color:var(--muted)}
+  .admin-status.ok{color:var(--accent)}
+  .admin-status.err{color:var(--flag)}
+  #tabsAdmin{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+  #tabsAdmin .tab{padding:8px 14px;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;font-family:var(--display);font-weight:700;font-size:14px}
+  #tabsAdmin .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+  .admin-group{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .admin-group-head{display:flex;gap:10px;align-items:flex-start}
+  .admin-group-head input{flex:1;font-weight:700}
+  .admin-move{display:flex;gap:6px;flex:none}
+  .admin-move button{width:30px;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer}
+  .admin-move button:disabled{opacity:.35;cursor:default}
+  .admin-steps{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+  .admin-step{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:10px 12px}
+  .admin-step-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .admin-sub{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+  .masthead .brand small{display:block;font-size:9px;letter-spacing:.1em;opacity:.7;text-transform:none}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="mh-in">
+    <div class="brand">Guía PLS <span>Admin</span></div>
+  </div>
+</header>
+
+<div class="admin-wrap">
+  <div class="admin-card">
+    <h2>Conexión con GitHub</h2>
+    <div class="admin-field">
+      <label>Token personal de GitHub (permiso "repo")</label>
+      <input id="token" type="password" placeholder="ghp_...">
+    </div>
+    <div class="admin-row">
+      <div class="admin-field"><label>Owner</label><input id="owner" placeholder="wpzprojects"></div>
+      <div class="admin-field"><label>Repo</label><input id="repo" placeholder="PathPLS"></div>
+      <div class="admin-field"><label>Branch</label><input id="branch" placeholder="main"></div>
+      <div class="admin-field"><label>Archivo</label><input id="path" placeholder="steps.json"></div>
+    </div>
+    <div class="admin-actions">
+      <button id="loadBtn" class="admin-btn" type="button">Cargar desde GitHub</button>
+      <button id="saveBtn" class="admin-btn" type="button">Guardar en GitHub</button>
+    </div>
+    <p class="admin-status" id="status">El token solo se guarda en este navegador (localStorage) y se usa únicamente para llamar a la API de GitHub. Nunca se envía a ningún otro sitio.</p>
+  </div>
+
+  <div id="tabsAdmin"></div>
+  <div id="editorRoot"></div>
+</div>
+
+<script src="js/admin.js" defer></script>
+</body>
+</html>
