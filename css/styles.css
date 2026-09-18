@@ -76,7 +76,7 @@ button{font:inherit}
 .group[hidden]{display:none}
 .group-head{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline;padding-bottom:11px;border-bottom:2px solid var(--ink)}
 .group-head h2{font-size:clamp(19px,2.4vw,25px);letter-spacing:-.02em}
-.group-head p{grid-column:1;font-size:14.5px;color:var(--muted);max-width:62ch}
+.group-head p{grid-column:1;font-size:14.5px;color:var(--muted)}
 .gcount{grid-row:1;grid-column:2;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 
 .steps{display:grid;gap:14px;margin-top:18px}
