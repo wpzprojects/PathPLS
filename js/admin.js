@@ -247,7 +247,7 @@
       '<input data-field="title" value="' + esc(step.title) + '" placeholder="Título del paso">' +
       '<textarea data-field="route" placeholder="Ruta de menú (una línea por opción; empieza con &quot;o &quot; para ruta alternativa)" rows="2">' + esc(routeToText(step.route)) + '</textarea>' +
       '<textarea data-field="comment" placeholder="Comentario (usa líneas que empiecen con &quot;- &quot; para lista de viñetas)" rows="2">' + esc(commentToText(step)) + '</textarea>' +
-      '<input data-field="images" value="' + esc(imagesToText(step)) + '" placeholder="Rutas de imagen (assets/img/archivo.jpg), separadas por coma">' +
+      '<input data-field="images" value="' + esc(imagesToText(step)) + '" placeholder="Rutas de imagen, o pega aquí una captura (Ctrl+V)">' +
       '<div class="admin-file-upload"><input type="file" accept="image/*" data-action="upload-image" data-gi="' + gi + '" data-si="' + si + '"><span class="admin-upload-status"></span></div>' +
       '</div>';
   }
@@ -287,20 +287,13 @@
     return btoa(binary);
   }
 
-  els.editor.addEventListener('change', function (e) {
-    var t = e.target;
-    if (t.dataset.action !== 'upload-image') return;
-    var file = t.files && t.files[0];
-    if (!file) return;
-    var gi = +t.dataset.gi, si = +t.dataset.si;
-    var statusEl = t.parentElement.querySelector('.admin-upload-status');
+  function uploadImageFile(file, gi, si, statusEl, imgInput) {
     if (!els.token.value.trim()) { statusEl.textContent = 'Falta el token de GitHub.'; statusEl.className = 'admin-upload-status err'; return; }
-
     statusEl.textContent = 'Subiendo…'; statusEl.className = 'admin-upload-status';
     var reader = new FileReader();
     reader.onload = function () {
       var bytes = new Uint8Array(reader.result);
-      var ext = (file.name.match(/\.[a-zA-Z0-9]+$/) || ['.jpg'])[0].toLowerCase();
+      var ext = (file.name && file.name.match(/\.[a-zA-Z0-9]+$/) || ['.png'])[0].toLowerCase();
       var filename = 'upload-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + ext;
       var path = 'assets/img/' + filename;
       var url = 'https://api.github.com/repos/' + els.owner.value.trim() + '/' + els.repo.value.trim() + '/contents/' + path;
@@ -320,13 +313,41 @@
         step.images = step.images || [];
         step.images.push(path);
         statusEl.textContent = 'Subida: ' + path; statusEl.className = 'admin-upload-status ok';
-        var imgInput = t.closest('.admin-step').querySelector('[data-field="images"]');
         imgInput.value = imagesToText(step);
       }).catch(function (err) {
         statusEl.textContent = 'Error: ' + err.message; statusEl.className = 'admin-upload-status err';
       });
     };
     reader.readAsArrayBuffer(file);
+  }
+
+  els.editor.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.dataset.action !== 'upload-image') return;
+    var file = t.files && t.files[0];
+    if (!file) return;
+    var gi = +t.dataset.gi, si = +t.dataset.si;
+    var statusEl = t.parentElement.querySelector('.admin-upload-status');
+    var imgInput = t.closest('.admin-step').querySelector('[data-field="images"]');
+    uploadImageFile(file, gi, si, statusEl, imgInput);
+  });
+
+  // pegar una captura de pantalla (Ctrl+V) directamente en el campo de imágenes
+  els.editor.addEventListener('paste', function (e) {
+    var t = e.target;
+    if (!t.matches || !t.matches('[data-field="images"]')) return;
+    var items = (e.clipboardData || window.clipboardData || {}).items || [];
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.indexOf('image/') === 0) {
+        e.preventDefault();
+        var file = items[i].getAsFile();
+        var stepEl = t.closest('[data-si]');
+        var gi = +stepEl.dataset.gi, si = +stepEl.dataset.si;
+        var statusEl = stepEl.querySelector('.admin-upload-status');
+        uploadImageFile(file, gi, si, statusEl, t);
+        break;
+      }
+    }
   });
 
   // ---------- acciones (agregar/eliminar/mover) ----------
