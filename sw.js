@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v9';
+const CACHE_VERSION = 'v10';
 const CACHE_NAME = 'pls-cadd-guide-' + CACHE_VERSION;
 
 const APP_SHELL = [
@@ -53,6 +53,21 @@ self.addEventListener('fetch', function (event) {
           return res;
         })
         .catch(function () { return caches.match('index.html'); })
+    );
+    return;
+  }
+
+  // steps.json es el contenido editable desde admin: red primero para que los
+  // cambios se vean al instante, con el caché como respaldo sin conexión.
+  if (url.pathname.endsWith('steps.json')) {
+    event.respondWith(
+      fetch(req).then(function (res) {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(function (cache) { cache.put(req, copy); });
+        }
+        return res;
+      }).catch(function () { return caches.match(req); })
     );
     return;
   }

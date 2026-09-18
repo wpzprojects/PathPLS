@@ -25,7 +25,7 @@
   ['token', 'owner', 'repo', 'branch', 'path'].forEach(function (k) {
     var saved = localStorage.getItem('gh_admin_' + k);
     if (saved) els[k].value = saved;
-    els[k].addEventListener('change', function () { localStorage.setItem('gh_admin_' + k, els[k].value); });
+    els[k].addEventListener('input', function () { localStorage.setItem('gh_admin_' + k, els[k].value); });
   });
   if (!els.owner.value) els.owner.value = 'wpzprojects';
   if (!els.repo.value) els.repo.value = 'PathPLS';
