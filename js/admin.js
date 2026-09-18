@@ -102,6 +102,7 @@
       return r.json();
     }).then(function (json) {
       state.data = JSON.parse(fromBase64(json.content));
+      ensureCids(state.data);
       state.sha = json.sha;
       setStatus('Cargado correctamente desde GitHub.', 'ok');
       renderTabs();
@@ -119,7 +120,7 @@
     setStatus('Guardando en GitHub…');
     var body = {
       message: msg,
-      content: toBase64(JSON.stringify(state.data, null, 2)),
+      content: toBase64(JSON.stringify(stripCids(state.data), null, 2)),
       sha: state.sha,
       branch: els.branch.value.trim()
     };
@@ -160,6 +161,48 @@
   // ---------- render del panel activo ----------
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
+  function newCid() { return 'c' + Math.random().toString(36).slice(2, 10); }
+  function ensureCids(data) {
+    Object.keys(data).forEach(function (panelId) {
+      (data[panelId] || []).forEach(function (g) {
+        if (!g._cid) g._cid = newCid();
+        (g.steps || []).forEach(function (s) { if (!s._cid) s._cid = newCid(); });
+      });
+    });
+  }
+  function stripCids(data) {
+    var clean = JSON.parse(JSON.stringify(data));
+    Object.keys(clean).forEach(function (panelId) {
+      (clean[panelId] || []).forEach(function (g) {
+        delete g._cid;
+        (g.steps || []).forEach(function (s) { delete s._cid; });
+      });
+    });
+    return clean;
+  }
+
+  // Animación FLIP: mide posiciones antes de mutar, vuelve a renderizar, y anima la diferencia
+  function withFlip(mutateAndRender) {
+    var before = {};
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cid]'), function (el) {
+      before[el.dataset.cid] = el.getBoundingClientRect();
+    });
+    mutateAndRender();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cid]'), function (el) {
+      var b = before[el.dataset.cid];
+      if (!b) return;
+      var a = el.getBoundingClientRect();
+      var dx = b.left - a.left, dy = b.top - a.top;
+      if (!dx && !dy) return;
+      el.style.transition = 'none';
+      el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      requestAnimationFrame(function () {
+        el.style.transition = 'transform .25s ease';
+        el.style.transform = '';
+      });
+    });
+  }
+
   function renderPanel() {
     var groups = state.data[state.panel] || [];
     var counter = { n: 0 };
@@ -170,9 +213,13 @@
   function renderGroupEditor(group, gi, groupCount, counter) {
     var stepsHtml = group.steps.map(function (s, si) {
       if (!s.sub) counter.n++;
-      return renderStepEditor(s, gi, si, group.steps.length, s.sub ? '·' : counter.n);
+      var html = renderStepEditor(s, gi, si, group.steps.length, s.sub ? '·' : counter.n);
+      if (si < group.steps.length - 1) {
+        html += '<div class="admin-insert-zone"><button type="button" title="Insertar paso aquí" data-action="insert-step" data-gi="' + gi + '" data-at="' + (si + 1) + '">+</button></div>';
+      }
+      return html;
     }).join('');
-    return '<div class="admin-group" data-gi="' + gi + '">' +
+    return '<div class="admin-group" data-gi="' + gi + '" data-cid="' + group._cid + '">' +
       '<div class="admin-group-head">' +
       '<span class="admin-group-tag">Grupo</span>' +
       '<input data-field="gtitle" class="admin-group-title" value="' + esc(group.title) + '" placeholder="Título del grupo">' +
@@ -181,14 +228,14 @@
       '<button type="button" title="Bajar grupo" data-action="down-group" ' + (gi === groupCount - 1 ? 'disabled' : '') + '>▼</button>' +
       '<button type="button" class="admin-danger" data-action="del-group">Eliminar grupo</button>' +
       '</div></div>' +
-      '<textarea data-field="gdesc" placeholder="Descripción del grupo" rows="1">' + esc(group.desc) + '</textarea>' +
+      '<div class="admin-group-desc-wrap"><textarea data-field="gdesc" placeholder="Descripción del grupo" rows="1">' + esc(group.desc) + '</textarea></div>' +
       '<div class="admin-steps">' + stepsHtml + '</div>' +
       '<button type="button" class="admin-btn" data-action="add-step">+ Agregar paso</button>' +
       '</div>';
   }
 
   function renderStepEditor(step, gi, si, stepCount, displayNum) {
-    return '<div class="admin-step" data-gi="' + gi + '" data-si="' + si + '">' +
+    return '<div class="admin-step" data-gi="' + gi + '" data-si="' + si + '" data-cid="' + step._cid + '">' +
       '<div class="admin-step-row">' +
       '<span class="admin-step-num" title="Número con el que se mostrará este paso">' + displayNum + '</span>' +
       '<label class="admin-sub" title="El paso no tendrá número propio; se mostrará con un punto (·), para acciones secundarias que no siguen la secuencia principal">' +
@@ -246,6 +293,8 @@
     arr.splice(to, 0, item);
   }
 
+  function newStep() { return { _cid: newCid(), title: 'Nuevo paso', sub: false, route: null, comment: '', commentList: null, images: [] }; }
+
   els.editor.addEventListener('click', function (e) {
     var b = e.target.closest('[data-action]');
     if (!b) return;
@@ -253,29 +302,34 @@
     var groups = state.data[state.panel];
 
     if (action === 'add-group') {
-      groups.push({ title: 'Nuevo grupo', desc: '', steps: [] });
-      renderPanel(); return;
+      withFlip(function () { groups.push({ _cid: newCid(), title: 'Nuevo grupo', desc: '', steps: [] }); renderPanel(); });
+      return;
+    }
+    if (action === 'insert-step') {
+      var gi0 = +b.dataset.gi, at = +b.dataset.at;
+      withFlip(function () { groups[gi0].steps.splice(at, 0, newStep()); renderPanel(); });
+      return;
     }
     var groupEl = b.closest('[data-gi]');
     var gi = +groupEl.dataset.gi;
     var stepEl = b.closest('[data-si]');
 
     if (action === 'del-group') {
-      if (confirm('¿Eliminar este grupo y todos sus pasos?')) { groups.splice(gi, 1); renderPanel(); }
+      if (confirm('¿Eliminar este grupo y todos sus pasos?')) { withFlip(function () { groups.splice(gi, 1); renderPanel(); }); }
       return;
     }
-    if (action === 'up-group') { if (gi > 0) moveItem(groups, gi, gi - 1); renderPanel(); return; }
-    if (action === 'down-group') { if (gi < groups.length - 1) moveItem(groups, gi, gi + 1); renderPanel(); return; }
+    if (action === 'up-group') { withFlip(function () { if (gi > 0) moveItem(groups, gi, gi - 1); renderPanel(); }); return; }
+    if (action === 'down-group') { withFlip(function () { if (gi < groups.length - 1) moveItem(groups, gi, gi + 1); renderPanel(); }); return; }
     if (action === 'add-step') {
-      groups[gi].steps.push({ title: 'Nuevo paso', sub: false, route: null, comment: '', commentList: null, images: [] });
-      renderPanel(); return;
+      withFlip(function () { groups[gi].steps.push(newStep()); renderPanel(); });
+      return;
     }
     if (stepEl) {
       var si = +stepEl.dataset.si;
       var steps = groups[gi].steps;
-      if (action === 'del-step') { if (confirm('¿Eliminar este paso?')) { steps.splice(si, 1); renderPanel(); } return; }
-      if (action === 'up-step') { if (si > 0) moveItem(steps, si, si - 1); renderPanel(); return; }
-      if (action === 'down-step') { if (si < steps.length - 1) moveItem(steps, si, si + 1); renderPanel(); return; }
+      if (action === 'del-step') { if (confirm('¿Eliminar este paso?')) { withFlip(function () { steps.splice(si, 1); renderPanel(); }); } return; }
+      if (action === 'up-step') { withFlip(function () { if (si > 0) moveItem(steps, si, si - 1); renderPanel(); }); return; }
+      if (action === 'down-step') { withFlip(function () { if (si < steps.length - 1) moveItem(steps, si, si + 1); renderPanel(); }); return; }
     }
   });
 
