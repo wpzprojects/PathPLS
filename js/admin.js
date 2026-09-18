@@ -27,6 +27,14 @@
     editor: document.getElementById('editorRoot')
   };
 
+  // ---------- tema claro/oscuro (misma clave que la guía; el atributo inicial lo fija el script de <head>) ----------
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('pls-theme', next);
+  });
+
   // ---------- persistencia local de config (nunca se envía a ningún lado salvo GitHub) ----------
   ['token'].forEach(function (k) {
     var saved = localStorage.getItem('gh_admin_' + k);
