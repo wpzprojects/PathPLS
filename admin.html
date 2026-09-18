@@ -25,24 +25,22 @@
   }
   .admin-card textarea, .admin-group textarea, .admin-step textarea{resize:vertical}
   .admin-sub input[type="checkbox"]{flex:none;width:15px;height:15px;margin:0;accent-color:var(--accent)}
-  .admin-step input:not([type="checkbox"]), .admin-step textarea{background:color-mix(in srgb, var(--surface-2) 35%, black 65%)}
   .admin-row{display:flex;gap:10px;flex-wrap:wrap}
   .admin-row .admin-field{flex:1;min-width:140px}
   .admin-actions{display:flex;gap:10px;margin-top:6px}
   .admin-btn, .admin-danger{font-family:var(--display);font-weight:700;font-size:13px;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink)}
   .admin-btn:hover{border-color:var(--accent);color:var(--accent)}
-  .admin-danger{border-color:var(--flag);color:var(--flag);background:none}
-  .admin-danger:hover{background:var(--flag-soft)}
-  .admin-danger.confirming{background:var(--flag);color:#fff;border-color:var(--flag)}
+  .admin-danger:hover{background:var(--surface-3)}
+  .admin-danger.confirming{background:rgba(239,68,68,.16);color:#EF4444;border-color:#EF4444}
   .admin-status{font-family:var(--mono);font-size:12.5px;padding:8px 0;color:var(--muted)}
   .admin-status.ok{color:var(--accent)}
   .admin-status.err{color:var(--flag)}
   #tabsAdmin{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line)}
   #tabsAdmin .tab{padding:8px 14px;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;font-family:var(--display);font-weight:700;font-size:14px}
   #tabsAdmin .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
-  .admin-group{background:var(--surface-3);border:1px solid var(--accent);border-radius:10px;padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
+  .admin-group{background:var(--surface-3);border:1px solid var(--line-strong);border-radius:10px;padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
   .admin-group-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  .admin-group-tag{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);border-radius:5px;padding:4px 8px}
+  .admin-group-tag{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);background:var(--surface-2);border-radius:5px;padding:4px 8px}
   .admin-group-title{flex:1;min-width:160px;font-weight:800!important;font-size:17px!important;font-family:var(--display)!important;margin-bottom:0!important}
   .admin-group textarea[data-field="gdesc"]{margin-top:8px}
   .admin-move{display:flex;gap:6px;flex:none;flex-wrap:nowrap}
@@ -51,7 +49,7 @@
   .admin-move button:disabled{opacity:.35;cursor:default}
   .admin-move .admin-danger{width:auto}
   .admin-steps{display:flex;flex-direction:column;margin:12px 0}
-  .admin-step{background:color-mix(in srgb, var(--surface-2) 85%, black 15%);border:1px solid var(--accent);border-radius:7px;padding:10px 12px;position:relative}
+  .admin-step{background:color-mix(in srgb, var(--surface-2) 85%, black 15%);border:1px solid var(--line-strong);border-radius:7px;padding:10px 12px;position:relative}
   .admin-step-row{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
   .admin-step-num{flex:none;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:5px;min-width:22px;text-align:center;padding:3px 0}
   .admin-step-row .admin-move{margin-left:auto}
@@ -62,7 +60,7 @@
   .admin-insert-zone{position:relative;height:26px;margin:6px 0}
   .admin-insert-zone button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:15px;line-height:1;cursor:pointer;opacity:.45;transition:opacity .15s ease,border-color .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center}
   .admin-insert-zone:hover button{opacity:1;border-color:var(--accent);color:var(--accent)}
-  .admin-file-upload{display:flex;align-items:center;gap:8px;margin-bottom:8px;width:100%;box-sizing:border-box;background:color-mix(in srgb, var(--surface-2) 35%, black 65%);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px}
+  .admin-file-upload{display:flex;align-items:center;gap:8px;margin-bottom:8px;width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px}
   .admin-file-upload input[type="file"]{flex:1;font-size:12.5px;color:var(--muted);width:auto;margin-bottom:0;background:none;border:none;padding:0}
   .admin-upload-status{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
   .admin-upload-status.ok{color:var(--accent)}
