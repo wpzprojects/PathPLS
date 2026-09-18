@@ -151,6 +151,11 @@ ul.links a{font-family:var(--mono);font-size:12.5px;word-break:break-all}
 .empty{margin-top:44px;text-align:center;color:var(--muted);font-size:15.5px}
 footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);max-width:74ch}
 
+.backup-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.backup-btn{font-family:var(--display);font-weight:700;font-size:13px;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.backup-btn:hover:not(:disabled){background:var(--accent);color:#fff}
+.backup-btn:disabled{opacity:.6;cursor:progress}
+
 /* ---------- lightbox ---------- */
 .lightbox{position:fixed;inset:0;z-index:100;background:rgba(10,16,13,.93);display:grid;place-items:center;padding:34px 18px}
 .lightbox[hidden]{display:none!important}

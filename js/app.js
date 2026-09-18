@@ -173,6 +173,111 @@
     if (e.target === lb || e.target.id === 'lbclose') closeLb();
   });
 
+  // ---------- copia de seguridad (json / xlsx con imágenes) ----------
+  var PANEL_LABELS = { plscadd: 'PLS-CADD', otras: 'Otras acciones', plspole: 'PLS-POLE' };
+
+  function today() { return new Date().toISOString().slice(0, 10); }
+
+  function saveBlob(blob, name) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+  }
+
+  function withBusy(btn, label, work) {
+    var orig = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = label;
+    work().catch(function () { btn.textContent = 'No se pudo generar'; return new Promise(function (r) { setTimeout(r, 2500); }); })
+      .then(function () { btn.disabled = false; btn.textContent = orig; });
+  }
+
+  function loadExcelJs() {
+    if (window.ExcelJS) return Promise.resolve();
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = 'js/vendor/exceljs.min.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  function fetchImage(path) {
+    return fetch(path).then(function (r) {
+      if (!r.ok) throw new Error(path);
+      return r.blob();
+    }).then(function (blob) {
+      return Promise.all([blob.arrayBuffer(), createImageBitmap(blob)]).then(function (res) {
+        var ext = /\.png$/i.test(path) ? 'png' : 'jpeg';
+        return { buffer: res[0], ext: ext, w: res[1].width, h: res[1].height };
+      });
+    }).catch(function () { return null; });
+  }
+
+  function buildXlsx(data) {
+    var wb = new ExcelJS.Workbook();
+    var MAX_W = 230, MAX_H = 150;
+    var jobs = [];
+    Object.keys(PANEL_LABELS).forEach(function (key) {
+      var ws = wb.addWorksheet(PANEL_LABELS[key]);
+      ws.columns = [
+        { header: 'N.º', width: 6 }, { header: 'Título', width: 42 },
+        { header: 'Ruta de menú', width: 38 }, { header: 'Comentario', width: 55 },
+        { header: 'Capturas', width: 34 }
+      ];
+      ws.getRow(1).font = { bold: true };
+      ws.views = [{ state: 'frozen', ySplit: 1 }];
+      var n = 0;
+      (data[key] || []).forEach(function (group) {
+        var g = ws.addRow([group.title + (group.desc ? ' — ' + group.desc : '')]);
+        ws.mergeCells(g.number, 1, g.number, 5);
+        g.font = { bold: true, size: 12 };
+        g.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFDCEBE2' } };
+        (group.steps || []).forEach(function (step) {
+          if (!step.sub) n++;
+          var comment = step.commentList && step.commentList.length
+            ? step.commentList.map(function (l) { return '- ' + l; }).join('\n') : (step.comment || '');
+          var row = ws.addRow([step.sub ? '·' : n, step.title, step.route ? step.route.copy : '', comment]);
+          row.alignment = { vertical: 'top', wrapText: true };
+          (step.images || []).forEach(function (path, i) {
+            jobs.push(fetchImage(path).then(function (img) {
+              if (!img) return;
+              var k = Math.min(MAX_W / img.w, MAX_H / img.h, 1);
+              var w = Math.round(img.w * k), h = Math.round(img.h * k);
+              var id = wb.addImage({ buffer: img.buffer, extension: img.ext });
+              ws.addImage(id, { tl: { col: 4, row: row.number - 1 + 0.02 }, ext: { width: w, height: h } });
+              row.height = Math.max(row.height || 0, h * 0.75 + 6);
+            }));
+          });
+        });
+      });
+    });
+    return Promise.all(jobs).then(function () { return wb.xlsx.writeBuffer(); });
+  }
+
+  document.getElementById('dlJson').addEventListener('click', function () {
+    withBusy(this, 'Preparando…', function () {
+      return fetch('steps.json').then(function (r) { return r.blob(); }).then(function (b) {
+        saveBlob(b, 'PathPLS-respaldo-' + today() + '.json');
+      });
+    });
+  });
+
+  document.getElementById('dlXlsx').addEventListener('click', function () {
+    withBusy(this, 'Generando Excel…', function () {
+      return Promise.all([loadExcelJs(), fetch('steps.json').then(function (r) { return r.json(); })])
+        .then(function (res) { return buildXlsx(res[1]); })
+        .then(function (buf) {
+          saveBlob(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'PathPLS-guia-' + today() + '.xlsx');
+        });
+    });
+  });
+
   // ---------- render dinámico de tarjetas desde steps.json ----------
   function esc(s) {
     return String(s == null ? '' : s)
