@@ -487,6 +487,14 @@
 
   function newStep() { return { _cid: newCid(), title: 'Nuevo paso', sub: false, route: null, comment: '', commentList: null, images: [] }; }
 
+  // la tarjeta recién creada entra deslizándose desde la izquierda
+  function markEntering(cid) {
+    var el = els.editor.querySelector('.admin-step[data-cid="' + cid + '"]');
+    if (!el) return;
+    el.classList.add('entering');
+    el.addEventListener('animationend', function () { el.classList.remove('entering'); }, { once: true });
+  }
+
   // Confirmación en dos clics dentro del mismo botón (evita depender de confirm() nativo)
   function confirmThenRun(btn, label, run) {
     if (!btn.classList.contains('confirming')) {
@@ -515,7 +523,9 @@
     }
     if (action === 'insert-step') {
       var gi0 = +b.dataset.gi, at = +b.dataset.at;
-      withFlip(function () { groups[gi0].steps.splice(at, 0, newStep()); renderPanel(); });
+      var inserted = newStep();
+      withFlip(function () { groups[gi0].steps.splice(at, 0, inserted); renderPanel(); });
+      markEntering(inserted._cid);
       return;
     }
     if (action === 'del-image') {
@@ -538,7 +548,9 @@
     if (action === 'up-group') { withFlip(function () { if (gi > 0) moveItem(groups, gi, gi - 1); renderPanel(); }); return; }
     if (action === 'down-group') { withFlip(function () { if (gi < groups.length - 1) moveItem(groups, gi, gi + 1); renderPanel(); }); return; }
     if (action === 'add-step') {
-      withFlip(function () { groups[gi].steps.push(newStep()); renderPanel(); });
+      var added = newStep();
+      withFlip(function () { groups[gi].steps.push(added); renderPanel(); });
+      markEntering(added._cid);
       return;
     }
     if (stepEl) {
