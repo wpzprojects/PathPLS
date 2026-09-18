@@ -25,6 +25,7 @@
   .admin-btn:hover{border-color:var(--accent);color:var(--accent)}
   .admin-danger{border-color:var(--flag);color:var(--flag);background:none}
   .admin-danger:hover{background:var(--flag-soft)}
+  .admin-danger.confirming{background:var(--flag);color:#fff;border-color:var(--flag)}
   .admin-status{font-family:var(--mono);font-size:12.5px;padding:8px 0;color:var(--muted)}
   .admin-status.ok{color:var(--accent)}
   .admin-status.err{color:var(--flag)}
@@ -52,9 +53,9 @@
   .admin-back:hover{opacity:1;text-decoration:underline}
   .admin-group-desc-wrap{margin-left:62px}
   .admin-step{border:1px solid var(--line-strong);position:relative}
-  .admin-insert-zone{position:relative;height:14px;margin:-5px 0}
-  .admin-insert-zone button{position:absolute;top:50%;right:10px;transform:translateY(-50%) scale(.6);width:26px;height:26px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:16px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s ease,transform .15s ease;display:flex;align-items:center;justify-content:center}
-  .admin-insert-zone:hover button{opacity:1;transform:translateY(-50%) scale(1);border-color:var(--accent);color:var(--accent)}
+  .admin-insert-zone{position:relative;height:20px;margin:-9px 0}
+  .admin-insert-zone button{position:absolute;top:50%;right:10px;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:15px;line-height:1;cursor:pointer;opacity:.4;transition:opacity .15s ease,border-color .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center}
+  .admin-insert-zone:hover button{opacity:1;border-color:var(--accent);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -77,6 +78,10 @@
       <div class="admin-field"><label>Repo</label><input id="repo" placeholder="PathPLS"></div>
       <div class="admin-field"><label>Branch</label><input id="branch" placeholder="main"></div>
       <div class="admin-field"><label>Archivo</label><input id="path" placeholder="steps.json"></div>
+    </div>
+    <div class="admin-field">
+      <label>Mensaje del commit</label>
+      <input id="commitMsg" value="Actualizar pasos de la guía">
     </div>
     <div class="admin-actions">
       <button id="loadBtn" class="admin-btn" type="button">Cargar desde GitHub</button>

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const CACHE_NAME = 'pls-cadd-guide-' + CACHE_VERSION;
 
 const APP_SHELL = [

@@ -16,6 +16,7 @@
     loadBtn: document.getElementById('loadBtn'),
     saveBtn: document.getElementById('saveBtn'),
     status: document.getElementById('status'),
+    commitMsg: document.getElementById('commitMsg'),
     tabs: document.getElementById('tabsAdmin'),
     editor: document.getElementById('editorRoot')
   };
@@ -116,7 +117,7 @@
   els.saveBtn.addEventListener('click', function () {
     if (!state.data) { setStatus('Primero carga los datos desde GitHub.', 'err'); return; }
     if (!els.token.value.trim()) { setStatus('Falta el token de GitHub.', 'err'); return; }
-    var msg = prompt('Mensaje del commit:', 'Actualizar pasos de la guía') || 'Actualizar pasos de la guía';
+    var msg = els.commitMsg.value.trim() || 'Actualizar pasos de la guía';
     setStatus('Guardando en GitHub…');
     var body = {
       message: msg,
@@ -295,6 +296,22 @@
 
   function newStep() { return { _cid: newCid(), title: 'Nuevo paso', sub: false, route: null, comment: '', commentList: null, images: [] }; }
 
+  // Confirmación en dos clics dentro del mismo botón (evita depender de confirm() nativo)
+  function confirmThenRun(btn, label, run) {
+    if (!btn.classList.contains('confirming')) {
+      btn.classList.add('confirming');
+      btn.dataset.origLabel = btn.textContent;
+      btn.textContent = label;
+      btn._revertTimer = setTimeout(function () {
+        btn.classList.remove('confirming');
+        btn.textContent = btn.dataset.origLabel;
+      }, 3000);
+      return;
+    }
+    clearTimeout(btn._revertTimer);
+    run();
+  }
+
   els.editor.addEventListener('click', function (e) {
     var b = e.target.closest('[data-action]');
     if (!b) return;
@@ -315,7 +332,7 @@
     var stepEl = b.closest('[data-si]');
 
     if (action === 'del-group') {
-      if (confirm('¿Eliminar este grupo y todos sus pasos?')) { withFlip(function () { groups.splice(gi, 1); renderPanel(); }); }
+      confirmThenRun(b, '¿Seguro? Sí, eliminar', function () { withFlip(function () { groups.splice(gi, 1); renderPanel(); }); });
       return;
     }
     if (action === 'up-group') { withFlip(function () { if (gi > 0) moveItem(groups, gi, gi - 1); renderPanel(); }); return; }
@@ -327,7 +344,7 @@
     if (stepEl) {
       var si = +stepEl.dataset.si;
       var steps = groups[gi].steps;
-      if (action === 'del-step') { if (confirm('¿Eliminar este paso?')) { withFlip(function () { steps.splice(si, 1); renderPanel(); }); } return; }
+      if (action === 'del-step') { confirmThenRun(b, '¿Seguro? Sí, eliminar', function () { withFlip(function () { steps.splice(si, 1); renderPanel(); }); }); return; }
       if (action === 'up-step') { withFlip(function () { if (si > 0) moveItem(steps, si, si - 1); renderPanel(); }); return; }
       if (action === 'down-step') { withFlip(function () { if (si < steps.length - 1) moveItem(steps, si, si + 1); renderPanel(); }); return; }
     }

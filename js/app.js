@@ -13,13 +13,32 @@
   });
 
   var adminGear = document.getElementById('adminGear');
+  var adminGate = document.getElementById('adminGate');
+  var adminGateInput = document.getElementById('adminGateInput');
+  var adminGateGo = document.getElementById('adminGateGo');
+  var adminGateErr = document.getElementById('adminGateErr');
+
   adminGear.addEventListener('click', function () {
-    var key = window.prompt('Clave de administración:');
-    if (key === null) return;
-    if (key.trim().toLowerCase() === 'pls') {
+    adminGate.hidden = !adminGate.hidden;
+    if (!adminGate.hidden) { adminGateInput.value = ''; adminGateErr.hidden = true; adminGateInput.focus(); }
+  });
+
+  function tryAdminKey() {
+    if (adminGateInput.value.trim().toLowerCase() === 'pls') {
       window.location.href = 'admin.html';
     } else {
-      window.alert('Clave incorrecta.');
+      adminGateErr.hidden = false;
+      adminGateInput.focus();
+    }
+  }
+  adminGateGo.addEventListener('click', tryAdminKey);
+  adminGateInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') tryAdminKey();
+    if (e.key === 'Escape') adminGate.hidden = true;
+  });
+  document.addEventListener('click', function (e) {
+    if (!adminGate.hidden && !adminGate.contains(e.target) && e.target !== adminGear && !adminGear.contains(e.target)) {
+      adminGate.hidden = true;
     }
   });
 
