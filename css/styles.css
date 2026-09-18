@@ -155,6 +155,11 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-si
 .backup-btn{font-family:var(--display);font-weight:700;font-size:13px;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
 .backup-btn:hover:not(:disabled){background:var(--accent);color:#fff}
 .backup-btn:disabled{opacity:.6;cursor:progress}
+a.backup-btn{display:inline-block;text-decoration:none}
+.pdf-pages{display:grid;gap:14px;margin-top:18px}
+.pdf-page{aspect-ratio:16/9;background:var(--surface);border:1px solid var(--line);border-radius:9px;box-shadow:var(--shadow);overflow:hidden}
+.pdf-page canvas{display:block;width:100%;height:auto}
+.pdf-status{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
 
 /* ---------- lightbox ---------- */
 .lightbox{position:fixed;inset:0;z-index:100;background:rgba(10,16,13,.93);display:grid;place-items:center;padding:34px 18px}

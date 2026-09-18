@@ -58,6 +58,7 @@
     panels.forEach(function (p) { p.classList.toggle('on', p.id === 'panel-' + id); });
     closeAll(null);
     filter();
+    if (id === 'workflow') initPdf();
     window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   }
 
@@ -172,6 +173,53 @@
     if (t) { lbimg.src = t.dataset.full; lb.hidden = false; return; }
     if (e.target === lb || e.target.id === 'lbclose') closeLb();
   });
+
+  // ---------- visor de PDF (pestaña Workflow) ----------
+  var pdfStarted = false;
+  function initPdf() {
+    if (pdfStarted) return;
+    pdfStarted = true;
+    var box = document.getElementById('pdfPages');
+    var status = document.getElementById('pdfStatus');
+    var s = document.createElement('script');
+    s.src = 'js/vendor/pdf.min.js';
+    s.onerror = function () { pdfStarted = false; status.textContent = 'No se pudo cargar el visor. Usa "Descargar PDF".'; };
+    s.onload = function () {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdf.worker.min.js';
+      pdfjsLib.getDocument('assets/docs/PLS-CADD_Workflow.pdf').promise.then(function (pdf) {
+        box.innerHTML = '';
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            io.unobserve(en.target);
+            renderPdfPage(pdf, en.target);
+          });
+        }, { rootMargin: '600px 0px' });
+        for (var n = 1; n <= pdf.numPages; n++) {
+          var slot = document.createElement('div');
+          slot.className = 'pdf-page';
+          slot.dataset.n = n;
+          box.appendChild(slot);
+          io.observe(slot);
+        }
+      }).catch(function () { pdfStarted = false; status.textContent = 'No se pudo abrir el documento. Usa "Descargar PDF".'; });
+    };
+    document.head.appendChild(s);
+  }
+
+  function renderPdfPage(pdf, slot) {
+    pdf.getPage(+slot.dataset.n).then(function (page) {
+      var base = page.getViewport({ scale: 1 });
+      var scale = Math.min(2.5, (slot.clientWidth || 800) / base.width * (window.devicePixelRatio || 1));
+      var vp = page.getViewport({ scale: scale });
+      var canvas = document.createElement('canvas');
+      canvas.width = vp.width;
+      canvas.height = vp.height;
+      return page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise.then(function () {
+        slot.appendChild(canvas);
+      });
+    });
+  }
 
   // ---------- copia de seguridad (json / xlsx con imágenes) ----------
   var PANEL_LABELS = { plscadd: 'PLS-CADD', otras: 'Otras acciones', plspole: 'PLS-POLE' };
