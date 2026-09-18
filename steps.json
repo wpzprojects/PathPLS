@@ -5,7 +5,7 @@
       "desc": "Carpetas, preferencias y ventanas. Se hace una vez por proyecto.",
       "steps": [
         {
-          "title": "Crear carpeta donde se guardará el proyecto",
+          "title": "Crear carpeta para almacenar el proyecto",
           "sub": false,
           "route": null,
           "comment": "Crear una carpeta en el PC destinada al proyecto, para almacenar en ella todos los archivos generados por PLS-CADD. Se recomienda organizar la información mediante subcarpetas, por ejemplo: Cables, Structures y Attachments.",
