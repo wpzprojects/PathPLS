@@ -29,27 +29,6 @@
       <svg class="i-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.8A7 7 0 0 1 7.2 3.5a7 7 0 1 0 9.3 9.3z"></path></svg>
       <svg class="i-sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6"></circle><path d="M10 2v2.4M10 15.6V18M18 10h-2.4M4.4 10H2M15.4 4.6l-1.7 1.7M6.3 13.7l-1.7 1.7M15.4 15.4l-1.7-1.7M6.3 6.3 4.6 4.6"></path></svg>
     </button>
-    <button class="theme-toggle" id="adminGear" type="button" aria-label="Administrar contenido">
-      <svg viewBox="0 0 20 20" aria-hidden="true">
-        <g fill="currentColor" stroke="none">
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(45 10 10)"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(90 10 10)"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(135 10 10)"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(180 10 10)"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(225 10 10)"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(270 10 10)"></rect>
-          <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(315 10 10)"></rect>
-        </g>
-        <circle cx="10" cy="10" r="5.4" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
-        <circle cx="10" cy="10" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
-      </svg>
-    </button>
-  </div>
-  <div class="admin-gate" id="adminGate" hidden>
-    <input type="password" id="adminGateInput" placeholder="Clave">
-    <button type="button" id="adminGateGo">Entrar</button>
-    <span class="admin-gate-err" id="adminGateErr" hidden>Clave incorrecta</span>
   </div>
 </header>
 
@@ -68,11 +47,32 @@
 <div class="panel" id="panel-plscadd" role="tabpanel"></div>
 <div class="panel" id="panel-otras" role="tabpanel"></div>
 <div class="panel" id="panel-plspole" role="tabpanel"></div>
-<div class="panel" id="panel-interes" role="tabpanel"><section class="card"><h2>Acceder a bases de datos desde la web</h2><ul class="links"><li><span>Criterios</span><a href="https://www.powerlinesystems.com/criteria-files" target="_blank" rel="noopener">https://www.powerlinesystems.com/criteria-files</a></li><li><span>Cables</span><a href="https://www.powerlinesystems.com/cables" target="_blank" rel="noopener">https://www.powerlinesystems.com/cables</a></li><li><span>Postes, torres, aisladores</span><a href="https://www.powline.com/files/pls_pole.html" target="_blank" rel="noopener">https://www.powline.com/files/pls_pole.html</a></li></ul></section><section class="card"><h2>Glosario</h2><div class="tablewrap"><table><tr><td class="k">Clearance</td><td>Distancia libre, distancia de seguridad o distancia de despeje</td></tr><tr><td class="k">Creep</td><td>Deformación plástica del conductor</td></tr><tr><td class="k">Every Day Stress (EDS)</td><td>Tension diaria (Tensión inicial que se da al conductor para que tenga una flecha adecuada)</td></tr><tr><td class="k">EDS Inicial</td><td>EDS antes de desarrollarse Creep</td></tr><tr><td class="k">EDS Final</td><td>EDS luego de desarrollarse Creep</td></tr><tr><td class="k">CHS</td><td>Carga horizontal de servicio (Tensión horizontal máxima permitida al conductor durante su operación normal considerando el comportamiento a largo plazo, como la relajación (creep) del material)</td></tr><tr><td class="k">Ruling Span (RS)</td><td>Vano Regulador o vano de control</td></tr><tr><td class="k">Sag</td><td>Flecha del conductor</td></tr><tr><td class="k">Sag Tensión Report</td><td>Tablas de flechado (o de tensado)</td></tr><tr><td class="k">Span</td><td>Vano o distancia entre dos estructuras</td></tr></table></div></section><section class="card"><h2>Extensiones de archivos</h2><div class="tablewrap"><table><tr><td class="k">.xyz</td><td>Archivo principal de PLSCADD, contiene todos los puntos xyz importados</td></tr><tr><td class="k">.FEA</td><td>Archivo de códigos carácteristicos</td></tr><tr><td class="k">.wir</td><td>Archivo de cable</td></tr><tr><td class="k">.stk</td><td>Archivo de estructura</td></tr><tr><td class="k">.cri</td><td>Archivo de criterios</td></tr><tr><td class="k">.LCA</td><td>Archivo de casos de carga</td></tr><tr><td class="k">.con</td><td>Archivo de restricciones (limitaciones de distribución de estructuras)</td></tr><tr><td class="k">.don</td><td>Archivo con la información de distribución, tendido y flechado para una línea</td></tr><tr><td class="k">.bak</td><td>Copia de respaldo de un proyecto</td></tr><tr><td class="k">.brk</td><td>Archivo de puntos de ruptura</td></tr><tr><td class="k">.num</td><td>Archivo de alineamientos</td></tr><tr><td class="k">.pps</td><td>Archivos maestros de los parámetros de dibujo (layouts, etc.)</td></tr><tr><td class="k">.STR</td><td>Incluye todos los archivos de estructuras que se han usado en el proyecto estructuras disponibles</td></tr><tr><td class="k">.tin</td><td>Contiene información acerca del modelo triangulado (TIN) del terreno</td></tr><tr><td class="k">.wnd</td><td>Salva el estado de las ventanas (vistas abiertas, escala, rotación y traslación del modelo en la ventana)</td></tr><tr><td class="k">.prt</td><td>Archivos de lista de partes y conjuntos</td></tr></table></div></section><section class="card"><h2>Conversiones</h2><div class="convgrid"><div class="conv">1 daN = 1.0197 kgF</div><div class="conv">1 kgF = 0.9807 daN</div><div class="conv">1 daN = 10 N</div><div class="conv">1 N = 0.1 daN</div><div class="conv">1 kgF = 9.807 N</div><div class="conv">1 N = 0.102 kgF</div></div></section></div>
+<div class="panel" id="panel-interes" role="tabpanel"><section class="card"><h2>Acceder a bases de datos desde la web</h2><ul class="links"><li><span>Criterios</span><a href="https://www.powerlinesystems.com/criteria-files" target="_blank" rel="noopener">https://www.powerlinesystems.com/criteria-files</a></li><li><span>Cables</span><a href="https://www.powerlinesystems.com/cables" target="_blank" rel="noopener">https://www.powerlinesystems.com/cables</a></li><li><span>Postes, torres, aisladores</span><a href="https://www.powline.com/files/pls_pole.html" target="_blank" rel="noopener">https://www.powline.com/files/pls_pole.html</a></li></ul></section><section class="card"><h2>Glosario</h2><div class="tablewrap"><table><tr><td class="k">Clearance</td><td>Distancia libre, distancia de seguridad o distancia de despeje</td></tr><tr><td class="k">Creep</td><td>Deformación plástica del conductor</td></tr><tr><td class="k">Every Day Stress (EDS)</td><td>Tension diaria (Tensión inicial que se da al conductor para que tenga una flecha adecuada)</td></tr><tr><td class="k">EDS Inicial</td><td>EDS antes de desarrollarse Creep</td></tr><tr><td class="k">EDS Final</td><td>EDS luego de desarrollarse Creep</td></tr><tr><td class="k">CHS</td><td>Carga horizontal de servicio (Tensión horizontal máxima permitida al conductor durante su operación normal considerando el comportamiento a largo plazo, como la relajación (creep) del material)</td></tr><tr><td class="k">Ruling Span (RS)</td><td>Vano Regulador o vano de control</td></tr><tr><td class="k">Sag</td><td>Flecha del conductor</td></tr><tr><td class="k">Sag Tensión Report</td><td>Tablas de flechado (o de tensado)</td></tr><tr><td class="k">Span</td><td>Vano o distancia entre dos estructuras</td></tr></table></div></section><section class="card"><h2>Extensiones de archivos</h2><div class="tablewrap"><table><tr><td class="k">.xyz</td><td>Archivo principal de PLSCADD, contiene todos los puntos xyz importados</td></tr><tr><td class="k">.FEA</td><td>Archivo de códigos carácteristicos</td></tr><tr><td class="k">.wir</td><td>Archivo de cable</td></tr><tr><td class="k">.stk</td><td>Archivo de estructura</td></tr><tr><td class="k">.cri</td><td>Archivo de criterios</td></tr><tr><td class="k">.LCA</td><td>Archivo de casos de carga</td></tr><tr><td class="k">.con</td><td>Archivo de restricciones (limitaciones de distribución de estructuras)</td></tr><tr><td class="k">.don</td><td>Archivo con la información de distribución, tendido y flechado para una línea</td></tr><tr><td class="k">.bak</td><td>Copia de respaldo de un proyecto</td></tr><tr><td class="k">.brk</td><td>Archivo de puntos de ruptura</td></tr><tr><td class="k">.num</td><td>Archivo de alineamientos</td></tr><tr><td class="k">.pps</td><td>Archivos maestros de los parámetros de dibujo (layouts, etc.)</td></tr><tr><td class="k">.STR</td><td>Incluye todos los archivos de estructuras que se han usado en el proyecto estructuras disponibles</td></tr><tr><td class="k">.tin</td><td>Contiene información acerca del modelo triangulado (TIN) del terreno</td></tr><tr><td class="k">.wnd</td><td>Salva el estado de las ventanas (vistas abiertas, escala, rotación y traslación del modelo en la ventana)</td></tr><tr><td class="k">.prt</td><td>Archivos de lista de partes y conjuntos</td></tr></table></div></section><section class="card"><h2>Conversiones</h2><div class="convgrid"><div class="conv">1 daN = 1.0197 kgF</div><div class="conv">1 kgF = 0.9807 daN</div><div class="conv">1 daN = 10 N</div><div class="conv">1 N = 0.1 daN</div><div class="conv">1 kgF = 9.807 N</div><div class="conv">1 N = 0.102 kgF</div></div></section>
+<div class="admin-entry">
+  <button class="admin-gear-btn" id="adminGear" type="button" aria-label="Administrar contenido">
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <g fill="currentColor" stroke="none">
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(45 10 10)"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(90 10 10)"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(135 10 10)"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(180 10 10)"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(225 10 10)"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(270 10 10)"></rect>
+        <rect x="9.1" y="1.3" width="1.8" height="2.6" rx="0.5" transform="rotate(315 10 10)"></rect>
+      </g>
+      <circle cx="10" cy="10" r="5.4" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
+      <circle cx="10" cy="10" r="1.9" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
+    </svg>
+  </button>
+  <div class="admin-gate" id="adminGate" hidden>
+    <input type="password" id="adminGateInput" placeholder="Clave">
+    <button type="button" id="adminGateGo">Entrar</button>
+    <span class="admin-gate-err" id="adminGateErr" hidden>Clave incorrecta</span>
+  </div>
+</div>
+</div>
 <p class="empty" id="empty" hidden>Ningún paso coincide con la búsqueda. Prueba con una palabra del menú, por ejemplo <em>Terrain</em>, <em>Criteria</em> o <em>Sections</em>.</p>
-<footer>
-  <p>Construido a partir de <span class="mono">PLS 2025-09-08.xlsx</span>. Las capturas venían incrustadas como imágenes en los comentarios de las celdas de la columna «Imagen». Rutas de menú en inglés, tal como aparecen en el programa.</p>
-</footer>
 </main>
 
 <div class="lightbox" id="lb" hidden>

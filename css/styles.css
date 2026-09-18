@@ -39,13 +39,8 @@ button{font:inherit}
 .mono{font-family:var(--mono)}
 
 /* ---------- masthead ---------- */
-.masthead{background:#12513D;color:#EDF3EF;position:relative}
-.admin-gate{position:absolute;top:100%;right:22px;margin-top:8px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:8px;box-shadow:var(--shadow);z-index:50}
-.admin-gate input{font-family:var(--body);font-size:14px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;width:120px}
-.admin-gate button{font-family:var(--display);font-weight:700;font-size:13px;border-radius:6px;padding:6px 12px;cursor:pointer;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
-.admin-gate-err{font-family:var(--mono);font-size:11px;color:var(--flag);white-space:nowrap}
+.masthead{background:#12513D;color:#EDF3EF}
 .theme-toggle{margin-left:auto;flex:none;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:none;border:1px solid rgba(237,243,239,.3);border-radius:50%;color:#EDF3EF;cursor:pointer}
-.theme-toggle ~ .theme-toggle{margin-left:0}
 .theme-toggle:hover{background:rgba(237,243,239,.12);border-color:rgba(237,243,239,.5)}
 .theme-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .theme-toggle .i-moon{fill:currentColor;stroke:none}
@@ -129,6 +124,14 @@ ul.cmt li{margin-bottom:3px}
 
 /* ---------- de interés ---------- */
 .card{margin-top:34px;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:20px 22px 22px;box-shadow:var(--shadow)}
+.admin-entry{position:relative;display:inline-block;margin-top:36px}
+.admin-gear-btn{flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);border:1px solid var(--line-strong);border-radius:50%;color:var(--muted);cursor:pointer}
+.admin-gear-btn:hover{color:var(--accent);border-color:var(--accent)}
+.admin-gear-btn svg{width:17px;height:17px}
+.admin-gate{position:absolute;top:calc(100% + 8px);left:0;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:8px;box-shadow:var(--shadow);z-index:50}
+.admin-gate input{font-family:var(--body);font-size:14px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;width:120px}
+.admin-gate button{font-family:var(--display);font-weight:700;font-size:13px;border-radius:6px;padding:6px 12px;cursor:pointer;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.admin-gate-err{font-family:var(--mono);font-size:11px;color:var(--flag);white-space:nowrap}
 .card h2{font-size:20px;letter-spacing:-.015em;padding-bottom:10px;border-bottom:1px solid var(--line-strong)}
 .tablewrap{overflow-x:auto;margin-top:6px}
 table{border-collapse:collapse;width:100%;font-size:15px}

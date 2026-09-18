@@ -239,8 +239,6 @@
     return '<div class="admin-step" data-gi="' + gi + '" data-si="' + si + '" data-cid="' + step._cid + '">' +
       '<div class="admin-step-row">' +
       '<span class="admin-step-num" title="Número con el que se mostrará este paso">' + displayNum + '</span>' +
-      '<label class="admin-sub" title="El paso no tendrá número propio; se mostrará con un punto (·), para acciones secundarias que no siguen la secuencia principal">' +
-      '<input type="checkbox" data-field="sub" ' + (step.sub ? 'checked' : '') + '> Paso secundario (sin número)</label>' +
       '<div class="admin-move">' +
       '<button type="button" data-action="up-step" ' + (si === 0 ? 'disabled' : '') + '>▲</button>' +
       '<button type="button" data-action="down-step" ' + (si === stepCount - 1 ? 'disabled' : '') + '>▼</button>' +
@@ -249,7 +247,8 @@
       '<input data-field="title" value="' + esc(step.title) + '" placeholder="Título del paso">' +
       '<textarea data-field="route" placeholder="Ruta de menú (una línea por opción; empieza con &quot;o &quot; para ruta alternativa)" rows="2">' + esc(routeToText(step.route)) + '</textarea>' +
       '<textarea data-field="comment" placeholder="Comentario (usa líneas que empiecen con &quot;- &quot; para lista de viñetas)" rows="2">' + esc(commentToText(step)) + '</textarea>' +
-      '<input data-field="images" value="' + esc(imagesToText(step)) + '" placeholder="Rutas de imagen separadas por coma (opcional)">' +
+      '<input data-field="images" value="' + esc(imagesToText(step)) + '" placeholder="Rutas de imagen (assets/img/archivo.jpg), separadas por coma">' +
+      '<div class="admin-file-upload"><input type="file" accept="image/*" data-action="upload-image" data-gi="' + gi + '" data-si="' + si + '"><span class="admin-upload-status"></span></div>' +
       '</div>';
   }
 
@@ -278,14 +277,56 @@
     }
   });
 
+  // ---------- subir imagen nueva a GitHub (assets/img/) ----------
+  function toBase64Raw(bytes) {
+    var binary = '';
+    var chunk = 0x8000;
+    for (var i = 0; i < bytes.length; i += chunk) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    }
+    return btoa(binary);
+  }
+
   els.editor.addEventListener('change', function (e) {
     var t = e.target;
-    if (t.dataset.field === 'sub') {
-      var stepEl = t.closest('[data-si]');
-      var gi = +stepEl.dataset.gi, si = +stepEl.dataset.si;
-      stepAt(gi, si).sub = t.checked;
-      renderPanel();
-    }
+    if (t.dataset.action !== 'upload-image') return;
+    var file = t.files && t.files[0];
+    if (!file) return;
+    var gi = +t.dataset.gi, si = +t.dataset.si;
+    var statusEl = t.parentElement.querySelector('.admin-upload-status');
+    if (!els.token.value.trim()) { statusEl.textContent = 'Falta el token de GitHub.'; statusEl.className = 'admin-upload-status err'; return; }
+
+    statusEl.textContent = 'Subiendo…'; statusEl.className = 'admin-upload-status';
+    var reader = new FileReader();
+    reader.onload = function () {
+      var bytes = new Uint8Array(reader.result);
+      var ext = (file.name.match(/\.[a-zA-Z0-9]+$/) || ['.jpg'])[0].toLowerCase();
+      var filename = 'upload-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + ext;
+      var path = 'assets/img/' + filename;
+      var url = 'https://api.github.com/repos/' + els.owner.value.trim() + '/' + els.repo.value.trim() + '/contents/' + path;
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + els.token.value.trim(),
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: 'Subir imagen ' + filename, content: toBase64Raw(bytes), branch: els.branch.value.trim() })
+      }).then(function (r) {
+        if (!r.ok) return r.json().then(function (j) { throw new Error((j && j.message) || ('HTTP ' + r.status)); });
+        return r.json();
+      }).then(function () {
+        var step = stepAt(gi, si);
+        step.images = step.images || [];
+        step.images.push(path);
+        statusEl.textContent = 'Subida: ' + path; statusEl.className = 'admin-upload-status ok';
+        var imgInput = t.closest('.admin-step').querySelector('[data-field="images"]');
+        imgInput.value = imagesToText(step);
+      }).catch(function (err) {
+        statusEl.textContent = 'Error: ' + err.message; statusEl.className = 'admin-upload-status err';
+      });
+    };
+    reader.readAsArrayBuffer(file);
   });
 
   // ---------- acciones (agregar/eliminar/mover) ----------
