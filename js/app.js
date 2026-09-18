@@ -143,5 +143,80 @@
     if (e.target === lb || e.target.id === 'lbclose') closeLb();
   });
 
-  activate('plscadd');
+  // ---------- render dinámico de tarjetas desde steps.json ----------
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function renderComment(step) {
+    if (step.commentList && step.commentList.length) {
+      return '<ul class="cmt">' + step.commentList.map(function (li) { return '<li>' + esc(li) + '</li>'; }).join('') + '</ul>';
+    }
+    if (step.comment) {
+      return '<p class="cmt">' + esc(step.comment).replace(/&lt;br&gt;/g, '<br>') + '</p>';
+    }
+    return '';
+  }
+
+  function renderRoute(step) {
+    if (!step.route) {
+      return '<div class="route" data-copy="N/A"><span class="noroute">Sin ruta de menú</span></div>';
+    }
+    var linesHtml = step.route.lines.map(function (line) {
+      var parts = line.alt ? ['<span class="alt">o</span>'] : [];
+      line.segments.forEach(function (seg, i) {
+        if (i > 0) parts.push('<span class="sep">›</span>');
+        parts.push('<span>' + esc(seg) + '</span>');
+      });
+      return '<div class="routeline">' + parts.join('') + '</div>';
+    }).join('');
+    return '<div class="route" data-copy="' + esc(step.route.copy) + '">' + linesHtml + '</div>';
+  }
+
+  function renderStep(id, step, num) {
+    var hasImages = step.images && step.images.length > 0;
+    var numHtml = step.sub ? '<span class="num sub">·</span>' : '<span class="num">' + num + '</span>';
+    var titleHtml = esc(step.title);
+    var head = hasImages
+      ? '<button class="step-head" type="button" aria-expanded="false" aria-controls="b-' + id + '">' + numHtml + '<h3>' + titleHtml + '</h3><span class="seehint">Ver captura</span><svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><polyline points="5.5,8 10,12.5 14.5,8"></polyline></svg></button>'
+      : '<div class="step-head plain">' + numHtml + '<h3>' + titleHtml + '</h3></div>';
+    var body = '';
+    if (hasImages) {
+      var thumbs = step.images.map(function (img) {
+        return '<button class="thumb" type="button" data-full="' + esc(img) + '" aria-label="Ampliar captura"><img src="' + esc(img) + '" alt="Captura del paso: ' + titleHtml + '" loading="lazy"></button>';
+      }).join('');
+      body = '<div class="step-body" id="b-' + id + '" hidden><div class="shots">' + thumbs + '</div></div>';
+    }
+    var searchBits = [step.title, step.route ? step.route.copy : '', step.comment || '', (step.commentList || []).join(' ')];
+    var dataQ = esc(searchBits.join(' '));
+    return '<article class="step' + (hasImages ? ' has-detail' : '') + '" id="' + id + '" data-q="' + dataQ + '">' +
+      head + renderRoute(step) + renderComment(step) + body + '</article>';
+  }
+
+  function renderGroup(panelId, gi, group, counter) {
+    var stepsHtml = group.steps.map(function (step, si) {
+      if (!step.sub) counter.n++;
+      return renderStep(panelId + '-' + gi + '-' + si, step, counter.n);
+    }).join('');
+    return '<section class="group" data-group>' +
+      '<header class="group-head"><h2>' + esc(group.title) + '</h2><p>' + esc(group.desc) + '</p><span class="gcount">' + group.steps.length + ' pasos</span></header>' +
+      '<div class="steps">' + stepsHtml + '</div></section>';
+  }
+
+  function renderPanel(panelId, groups) {
+    var el = document.getElementById('panel-' + panelId);
+    if (!el) return;
+    var counter = { n: 0 };
+    el.innerHTML = groups.map(function (group, gi) { return renderGroup(panelId, gi, group, counter); }).join('');
+  }
+
+  fetch('steps.json').then(function (r) { return r.json(); }).then(function (data) {
+    ['plscadd', 'otras', 'plspole'].forEach(function (panelId) {
+      renderPanel(panelId, data[panelId] || []);
+    });
+    activate('plscadd');
+  }).catch(function () {
+    activate('plscadd');
+  });
 })();

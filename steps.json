@@ -1,0 +1,2093 @@
+{
+  "plscadd": [
+    {
+      "title": "Arranque del proyecto",
+      "desc": "Carpetas, preferencias y ventanas. Se hace una vez por proyecto.",
+      "steps": [
+        {
+          "title": "Crear carpeta donde se guardará el proyecto",
+          "sub": false,
+          "route": null,
+          "comment": "Crear una carpeta y en ella guardar todos los archivos generados por el PLS-CADD (dentro de esta carpeta se recomienda crear algunas subcarpetas \"Cables\", \"Structures\", Attachments\")",
+          "commentList": null,
+          "images": [
+            "assets/img/step-001.jpg"
+          ]
+        },
+        {
+          "title": "Crear un nuevo proyecto",
+          "sub": false,
+          "route": {
+            "copy": "File > New > PLSCADD, o tambien\nCreate a New Project > PLS-CADD/Standard",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "New",
+                  "PLSCADD"
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Create a New Project",
+                  "PLS-CADD/Standard"
+                ]
+              }
+            ]
+          },
+          "comment": "Asignar un nombre al proyecto y guardar en la carpeta creada en el paso anterior",
+          "commentList": null,
+          "images": [
+            "assets/img/step-002.jpg"
+          ]
+        },
+        {
+          "title": "Configurar preferencias",
+          "sub": false,
+          "route": {
+            "copy": "File > Preferences…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "Preferences…"
+                ]
+              }
+            ]
+          },
+          "comment": "Configurar el sistema de unidades, el color de fondo y asignar las carpetas creadas inicialmente a cada directorio del proyecto",
+          "commentList": null,
+          "images": [
+            "assets/img/step-003.jpg"
+          ]
+        },
+        {
+          "title": "Abrir las ventanas de trabajo requeridas",
+          "sub": false,
+          "route": {
+            "copy": "Window > New Window > …",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Window",
+                  "New Window",
+                  "…"
+                ]
+              }
+            ]
+          },
+          "comment": "Abrir las siguientes ventanas \"Plan View\", \"Profile View\", \"3D View\"",
+          "commentList": null,
+          "images": [
+            "assets/img/step-004.jpg"
+          ]
+        },
+        {
+          "title": "Ingresar la información general del proyecto",
+          "sub": false,
+          "route": {
+            "copy": "Lines > General Data…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Lines",
+                  "General Data…"
+                ]
+              }
+            ]
+          },
+          "comment": "Diligenciar los campos de los que se tenga información",
+          "commentList": null,
+          "images": [
+            "assets/img/step-005.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Terreno, topografía y alineamiento",
+      "desc": "Del LiDAR al perfil. Todo lo que viene después se apoya en esto.",
+      "steps": [
+        {
+          "title": "Configurar el sistema de coordenadas del proyecto",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Coordinate System > Define",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Coordinate System",
+                  "Define"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-006.jpg"
+          ]
+        },
+        {
+          "title": "Cargar archivo de códigos característicos (.FEA)",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Feature Code Data > Load Fea File",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Feature Code Data",
+                  "Load Fea File"
+                ]
+              }
+            ]
+          },
+          "comment": "Este paso aplica cuando ya se tenga un archivo con los códigos FEA (recomendado)",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Agregar el nivel de tensión del proyecto",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Feature Code Data > Edit… > Add",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Feature Code Data",
+                  "Edit…",
+                  "Add"
+                ]
+              }
+            ]
+          },
+          "comment": "Agregar no solamente el nivel de tensión del proyecto sino también el nivel de tensión de las redes existentes que tengan interferencia con el proyecto",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Crear/Editar tabla de códigos característicos",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Feature Code Data > Edit… > Continue to Feature Code Data Edit Dialog",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Feature Code Data",
+                  "Edit…",
+                  "Continue to Feature Code Data Edit Dialog"
+                ]
+              }
+            ]
+          },
+          "comment": "En este paso se crean o editan los códigos característicos, igualmente se configuran los símbolos de visualización, las propiedades de cada código y las distancias verticales y horizontales a respetar con cada nivel de tensión",
+          "commentList": null,
+          "images": [
+            "assets/img/step-007.jpg"
+          ]
+        },
+        {
+          "title": "Configurar la distancia de despeje vertical (Distancia de seguridad al terreno)",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Clearance Line…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Clearance Line…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se selecciona el nivel de tensión del proyecto y el código del terreno (normalmente el 200), se puede colocar una distancia adicional de seguridad en el campo \"Vertical buffer\" (útil para red compacta donde puede ir la distancia entre el portante y la fase inferior)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-008.jpg"
+          ]
+        },
+        {
+          "title": "Configurar anchos de terreno",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Terrain Widths…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Terrain Widths…"
+                ]
+              }
+            ]
+          },
+          "comment": "\"Width of Profile View\" define el ancho total considerado para dibujar los elementos en el perfil, se puede establecer el ancho de la servidumbre o aumentarlo si se desea incluir más información. \"Profile View Ground\" determina el ancho considerado para trazar la línea de terreno en el perfil. Puede configurarse en 1 metro (aunque este valor puede ser mayor en caso de que los puntos de terreno no sean lo suficientemente densos)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-009.jpg"
+          ]
+        },
+        {
+          "title": "Ingresar topografía Lidar",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Edit > Merge Points for External File > Merge Points from LAS/LAZ Files…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Edit",
+                  "Merge Points for External File",
+                  "Merge Points from LAS/LAZ Files…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se debe asignar a cada clase de punto del estándar ASPRS el código característico (del .FEA) que le corresponda, los elementos como ruido y otros que no sean necesarios no se importan. Esta configuración se puede guardar y luego cargar en cualquier proyecto para facilitar la asignación.",
+          "commentList": null,
+          "images": [
+            "assets/img/step-010.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Descargar puntos desde internet (En caso de no tener topografia)",
+          "sub": false,
+          "route": {
+            "copy": "Terrain– Edit – Merge Points for External File – Merge Points from Internet...",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Edit",
+                  "Merge Points for External File",
+                  "Merge Points from Internet..."
+                ]
+              }
+            ]
+          },
+          "comment": "Se selecciona el código carácteristico donde se guardarán los puntos a descargar (se recomienda 201 detalle de nivel) y se selecciona la opción \"current plan view extents\". Cargar antes un poligono en kmz con la localización del proyecto para que los puntos descargados queden en la zona correcta (Terrain > Edit > Merge Points for External File > Merge Points from KML/KMZ Files…)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-011.jpg"
+          ]
+        },
+        {
+          "title": "Crear modelo de terreno (TIN)",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > TIN > Create Ground TIN…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "TIN",
+                  "Create Ground TIN…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Visualizar modelo de terreno",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > TIN > TIN Manager > (se selecciona el modelo de terreno en \"TIN Models\") > Set Display Options",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "TIN",
+                  "TIN Manager",
+                  "(se selecciona el modelo de terreno en \"TIN Models\")",
+                  "Set Display Options"
+                ]
+              }
+            ]
+          },
+          "comment": "Se selecciona la opción de visualización que se prefiera, se recomienda \"Render triangules\" y luego \"Color by elevation, intensity by incidence\"",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Enlazar Ortofoto",
+          "sub": false,
+          "route": {
+            "copy": "Drafting > Attachments Raster and Vector > Attachment Manager > Attach",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Drafting",
+                  "Attachments Raster and Vector",
+                  "Attachment Manager",
+                  "Attach"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "(Opcional) Importar imagen satelital desde internet (En caso de no tener Ortofoto)",
+          "sub": false,
+          "route": {
+            "copy": "Drafting > Attachments Raster and Vector > Attachment Manager > WMS",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Drafting",
+                  "Attachments Raster and Vector",
+                  "Attachment Manager",
+                  "WMS"
+                ]
+              }
+            ]
+          },
+          "comment": "En la ventana de \"WMS Import\" se configura: PLS WMTS Proxy > Query server > Mapbox Satellite > Image Format JPEG > Current Plan View Extends > Import > OK",
+          "commentList": null,
+          "images": [
+            "assets/img/step-012.jpg"
+          ]
+        },
+        {
+          "title": "Asociar visualización del modelo del terreno con la Ortofoto/Imagen Satelital",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > TIN > TIN Manager > (se selecciona el modelo de terreno en \"TIN Models\") > Set Display Options",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "TIN",
+                  "TIN Manager",
+                  "(se selecciona el modelo de terreno en \"TIN Models\")",
+                  "Set Display Options"
+                ]
+              }
+            ]
+          },
+          "comment": "Se configura la visualización del terreno para que coincida con la ortofoto, se selecciona \"Render triangules\" y luego \"Color from bitmap, intensity by incidence\"",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Importar vértices o puntos de inflexión (PIs) desde KMZ (en caso no estén en la topografía)",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Edit > Merge Points for External File > Merge Points from KML/KMZ Files…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Edit",
+                  "Merge Points for External File",
+                  "Merge Points from KML/KMZ Files…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se selecciona el kmz con los puntos o con la ruta de la red (solo uno de los dos) y se define que código asignarle (se recomienda torre o poste proyectado). Activar la opción \"set elevation for imported points\" que ajusta la elevación de los puntos con base al modelo TIN del terreno ya creado",
+          "commentList": null,
+          "images": [
+            "assets/img/step-013.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Asignar elevación a los PIs usando el modelo de terreno TIN",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > TIN > TIN Z Interpolation for Z=0 PIs, Survey Points, XY-based Structures, and/or Polygonal Constraints",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "TIN",
+                  "TIN Z Interpolation for Z=0 PIs, Survey Points, XY-based Structures, and/or Polygonal Constraints"
+                ]
+              }
+            ]
+          },
+          "comment": "Esta acción aplica para cuando los vértices ingresados quedan importados con Z = 0 y quedan por debajo del modelo de terreno",
+          "commentList": null,
+          "images": [
+            "assets/img/step-014.jpg"
+          ]
+        },
+        {
+          "title": "Crear alineamiento automático",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Alignment > Automatic Alignment",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Alignment",
+                  "Automatic Alignment"
+                ]
+              }
+            ]
+          },
+          "comment": "En este paso se genera el alineamiento automático escogiendo el código característico asociado a los puntos de torres/postes proyectados",
+          "commentList": null,
+          "images": [
+            "assets/img/step-015.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Invertir alineamiento",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Alignment > Reverse Alignment",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Alignment",
+                  "Reverse Alignment"
+                ]
+              }
+            ]
+          },
+          "comment": "En caso de que la dirección del alineamiento no sea la correcta, con esta opción se invierte el sentido del alineamiento",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Crear puntos interpolados sobre el alineamiento",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > TIN > Create Interpolated Points",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "TIN",
+                  "Create Interpolated Points"
+                ]
+              }
+            ]
+          },
+          "comment": "Con esta acción se refina el perfil sobre el alineamiento. En \"Offsets where interpolation is desired (space delimited)\" ingresar la configuración preferida (ej: 0 1 2 3 -1 -2 -3) esto depende de la densidad de los puntos del terreno y del ancho de servidumbre del proyecto. Esta opción Define las distancias laterales [offsets] desde el eje del alineamiento [centro de la línea de transmisión] donde el modelo TIN debe interpolar puntos de elevación para crear puntos de terreno)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-016.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Agregar un punto de inflexión (PI) sobre el terreno",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > TIN > Add point XY",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "TIN",
+                  "Add point XY"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-017.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Agregar, Mover y/o Eliminar un punto de inflexión o alineamiento",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Alignment > Add P.I.\nTerrain > Alignment > Delete P.I.\nTerrain > Alignment > Move P.I.",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Alignment",
+                  "Add P.I."
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Terrain",
+                  "Alignment",
+                  "Delete P.I."
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Terrain",
+                  "Alignment",
+                  "Move P.I."
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        }
+      ]
+    },
+    {
+      "title": "Criterios de diseño",
+      "desc": "El archivo .cri. Aquí la normativa se vuelve números.",
+      "steps": [
+        {
+          "title": "Establecer casos climáticos (hipótesis)",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Weather…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Weather…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-018.jpg"
+          ]
+        },
+        {
+          "title": "Asignar casos climáticos para calcular la fluencia/elongación permanente de los conductores debido a Creep y Carga",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Creep-Stretch…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Creep-Stretch…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": [
+            "Con esta acción se asignan los casos climáticos utilizados para calcular el alargamiento permanente de los conductores debido al efecto de creep (fluencia) a largo plazo y a cargas extremas a corto plazo",
+            "Creep: Deformación lenta y permanente del conductor bajo tensión sostenida en el tiempo (ej: temp máxima)",
+            "Load: Estiramiento permanente por cargas extremas de corta duración (ej: viento, temp mínima o hielo)"
+          ],
+          "images": [
+            "assets/img/step-019.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterio de modelado de conductores bimetalicos (cuando se trate de ACSR)",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Bimetallic Conductor Model…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Bimetallic Conductor Model…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se deja la opción 1 si se quiere ser más conservador y 2 si se quieren vanos mas largos con Temp Max",
+          "commentList": null,
+          "images": [
+            "assets/img/step-020.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterios de tensionado (% máximos de tensionado)",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Cable Tensions…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Cable Tensions…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-021.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterios de flechado automático",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Automatic Sagging…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Automatic Sagging…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-022.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterio de modelado de vano peso",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Weight Span Model…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Weight Span Model…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se selecciona la opción \"Exact method (always correct)\"",
+          "commentList": null,
+          "images": [
+            "assets/img/step-023.jpg"
+          ]
+        },
+        {
+          "title": "Asignar casos climáticos y condiciones para el cálculo de vano peso",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Weight Spans (method 1)…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Weight Spans (method 1)…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se cargan los criterios (casos climaticos y condición del conductor) para el cálculo de vano peso",
+          "commentList": null,
+          "images": [
+            "assets/img/step-024.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterios para la evaluación de separaciones verticales",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Survey Point Clearance and Danger Tree Locator…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Survey Point Clearance and Danger Tree Locator…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se selecciona la opción 2",
+          "commentList": null,
+          "images": [
+            "assets/img/step-025.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterios para la evaluación de separación entre fases",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Phase Clearances…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Phase Clearances…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se seleccionan las condiciones extremas: viento máximo con Creep y temperatura mínima Inicial RS",
+          "commentList": null,
+          "images": [
+            "assets/img/step-026.jpg"
+          ]
+        },
+        {
+          "title": "Definir criterios para la evaluación de oscilación y levantamiento del aislador",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Insulator Swing & Uplift…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Insulator Swing & Uplift…"
+                ]
+              }
+            ]
+          },
+          "comment": "Para el balanceo de aisladores, es importante tener en cuenta la coordinación de aislamiento en dos escenarios Distancia de seguridad para Sobretension a frecuencia industrial con Vmax y distancia de seguridad para sobretensión atmosférica con Vprom",
+          "commentList": null,
+          "images": [
+            "assets/img/step-027.jpg"
+          ]
+        },
+        {
+          "title": "Definir temperatura y condición de cables por defecto",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Default Wire Temperature and Condition, Section Sort Order…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Default Wire Temperature and Condition, Section Sort Order…"
+                ]
+              }
+            ]
+          },
+          "comment": "Se definen los criterios de temperatura y condición de cables por defecto, usados por PLS-CADD para el tendido (stringing) de los cantones. Se coloca la temperatura promedio, condición creep RS, EDS; Initial RS y Wind From Left y se selecciona \"Sort by start structure number then...\" (opcion 2)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-028.jpg"
+          ]
+        },
+        {
+          "title": "Ingresar los criterios de carga sobre las estructuras",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Structure Loads (method 4)…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Structure Loads (method 4)…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-029.jpg"
+          ]
+        },
+        {
+          "title": "Condiciones de carga especiales, una fase rota, un cable de guarda roto, etc.",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Structure Loads (method 4)…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Structure Loads (method 4)…"
+                ]
+              }
+            ]
+          },
+          "comment": "Los casos especiales de fases o cables de guarda rotos se colocan a continuación de los casos de carga normales",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Factores de diseño (sobrecarga)",
+          "sub": false,
+          "route": null,
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Configurar las condiciones de carga para los reportes de vano viento y vano peso",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Wind & Weight Span Report…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Wind & Weight Span Report…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-030.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Estructuras, conductores y cantones",
+      "desc": "Modelar, plantillar, tender y flechar.",
+      "steps": [
+        {
+          "title": "Crear estructuras",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Create New Structure…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Create New Structure…"
+                ]
+              }
+            ]
+          },
+          "comment": "Este proceso se puede hacer solo una vez y se luego crear un banco de información donde se guarden todas las configuraciones. Se debe tener muy claro el tipo de aisladores a utilizar y su referencia (ya en este punto se debe tener elaborado el estudio de coordinación de aislamiento.",
+          "commentList": null,
+          "images": [
+            "assets/img/step-031.jpg"
+          ]
+        },
+        {
+          "title": "Editar estructuras",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Edit Structure…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Edit Structure…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Cargar conductores",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Cable Files > Avalilable Cable List > Add Cable",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Cable Files",
+                  "Avalilable Cable List",
+                  "Add Cable"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Editar conductores",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Cable Files > Edit Existing Cable File…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Cable Files",
+                  "Edit Existing Cable File…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Crear conductores",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Cable Files > Create New Cable File…\nSections > Cable Files > Create Bundled Cable File",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Cable Files",
+                  "Create New Cable File…"
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Sections",
+                  "Cable Files",
+                  "Create Bundled Cable File"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Agregar estructuras sobre el alineamiento",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Add",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Add"
+                ]
+              }
+            ]
+          },
+          "comment": "Luego de seleccionar la opción, se selecciona un punto sobre el alineamiento, se escoje la estructura en la ventana emergente y Ok",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Ajustar la posición de una estructura sobre un punto de inflexión o vértice ya definido y cargado",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Move > On Snap",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Move",
+                  "On Snap"
+                ]
+              }
+            ]
+          },
+          "comment": "Se recomienda que previamente en Terrain > Display Data Display Options, en \"Draw only designated feature codes\" se activen solamente los puntos del código característico que tiene los vértices o puntos obligados de estructuras. Luego de ello basta con acercarse al PI y dar clic (automáticamente el programa reubica la estructura mas cercana allí)",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Agregar una sección o cantón",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Add",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Add"
+                ]
+              }
+            ]
+          },
+          "comment": "Previamente se debió realizar la distribución básica de estructuras (incluyendo las de inicio/final de circuito), luego de ello basta con seleccionar cualquier punto sobre el alineamiento para agregar una nueva sección o cantón",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Realizar auto flechado",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Modify > (seleccionamos la sección de la línea) > OK > (realizamos los ajustes) > Automatic Sagging",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Modify",
+                  "(seleccionamos la sección de la línea)",
+                  "OK",
+                  "(realizamos los ajustes)",
+                  "Automatic Sagging"
+                ]
+              }
+            ]
+          },
+          "comment": "Esta acción se debe realizar siempre que se realice un cambio o modificación de conductor, de condiciones mecánicas o de clima en una sección o cantón",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "(Opcional) Cambiar el conductor de un cantón o sección",
+          "sub": false,
+          "route": {
+            "copy": "Section > Modify, o también\nIcono Section Modify",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Section",
+                  "Modify"
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Icono Section Modify"
+                ]
+              }
+            ]
+          },
+          "comment": "Para cambiar el conductor en un vano, seleccionar el icono Section Modify y luego seleccionar el vano, luego editar las configuraciones en la ventana emergente (no olvidar presionar \"Automatic Sagging\")",
+          "commentList": null,
+          "images": [
+            "assets/img/step-032.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Cambiar el conductor de todo el trazado",
+          "sub": false,
+          "route": {
+            "copy": "Section > Table",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Section",
+                  "Table"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-033.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Reportes y salidas",
+      "desc": "Lo que se entrega: árboles de carga, tablas, KMZ, chequeos.",
+      "steps": [
+        {
+          "title": "Importar/Exportar archivo LCA (Load CAses file)",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Loads > Write LCA File… o Write LIC File…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Loads",
+                  "Write LCA File… o Write LIC File…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-034.jpg"
+          ]
+        },
+        {
+          "title": "Generar reporte de arboles de carga",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Loads > Report (o Report Options…)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Loads",
+                  "Report (o Report Options…)"
+                ]
+              }
+            ]
+          },
+          "comment": "En \"Report Options...\" activar la opción \"Wire load induced ground line moments…\" para que en el reporte se incluyan las reacciones en la base de la estructura",
+          "commentList": null,
+          "images": [
+            "assets/img/step-035.jpg"
+          ]
+        },
+        {
+          "title": "Generar tablas de tendido y flechado",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Stringing Chart > Multiple Sections… (o Single Section…)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Stringing Chart",
+                  "Multiple Sections… (o Single Section…)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-036.jpg"
+          ]
+        },
+        {
+          "title": "Generar tabla de estructuras",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Staking Table…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Staking Table…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Exportar proyecto a KMZ",
+          "sub": false,
+          "route": {
+            "copy": "File > Export > KMZ (Google Earth)…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "Export",
+                  "KMZ (Google Earth)…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-037.jpg"
+          ]
+        },
+        {
+          "title": "Generar reporte de utilización de estructuras",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Check (o el icono correspondiente) >  luego seleccionar la estructura",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Check (o el icono correspondiente)",
+                  "luego seleccionar la estructura"
+                ]
+              }
+            ]
+          },
+          "comment": "Hay varias opciones seleccionables que permiten diferentes tipos de reporte",
+          "commentList": null,
+          "images": [
+            "assets/img/step-038.jpg"
+          ]
+        },
+        {
+          "title": "Generar reporte de criterios",
+          "sub": false,
+          "route": {
+            "copy": "Criteria > Report…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Criteria",
+                  "Report…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-039.jpg"
+          ]
+        }
+      ]
+    }
+  ],
+  "otras": [
+    {
+      "title": "Otras acciones",
+      "desc": "Comandos sueltos que no siguen la secuencia pero se necesitan a diario.",
+      "steps": [
+        {
+          "title": "Realizar mediciones",
+          "sub": false,
+          "route": {
+            "copy": "View > Measure Distance > (varias opciones)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "View",
+                  "Measure Distance",
+                  "(varias opciones)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-040.jpg"
+          ]
+        },
+        {
+          "title": "Definir que entidades identificará el cursor cuando se midan distancias, se coloquen estructuras, etc.",
+          "sub": false,
+          "route": {
+            "copy": "View > Entity Info Snap Settings…\n(o tambien clic izquierdo y \"Change Snap Settings)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "View",
+                  "Entity Info Snap Settings…"
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "(o tambien clic izquierdo y \"Change Snap Settings)"
+                ]
+              }
+            ]
+          },
+          "comment": "En la ventana \"Entity Info Snap Modes\" se seleccionan los puntos a activar/desactivar",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Borrar marcas de mediciones o distancias entre cantones",
+          "sub": true,
+          "route": {
+            "copy": "View > Markers > Clear Markers",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "View",
+                  "Markers",
+                  "Clear Markers"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Crear manualmente un punto de terreno",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Edit > Edit XYZ… > Add",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Edit",
+                  "Edit XYZ…",
+                  "Add"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Modificar sistema de coordenadas de un proyecto en curso",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Coordinate System > Reproject Project",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Coordinate System",
+                  "Reproject Project"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Definir que tipos de puntos de terreno mostrar en las diferentes ventanas",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Survey Data Display Options…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Survey Data Display Options…"
+                ]
+              }
+            ]
+          },
+          "comment": "Allí se selecciona la opción \"Draw only designated feature codes\", y en el botón \"Feature codes to draw\" se selecciona los códigos característicos a mostrar/ocultar",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Eliminar puntos topográficos de forma masiva",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Edit > Desactivate, Delete Or Export Points > Non-graphical…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Edit",
+                  "Desactivate, Delete Or Export Points",
+                  "Non-graphical…"
+                ]
+              }
+            ]
+          },
+          "comment": "Con esta acción se pueden eliminar puntos topográficos de forma masiva usando filtros, por ejemplo por código característico (también sirve para exportar la selección realizada con los filtros)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-041.jpg"
+          ]
+        },
+        {
+          "title": "Cambiar el codigo caracteristico de un grupo de puntos",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Edit > Change Feature Code > (Varias opciones)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Edit",
+                  "Change Feature Code",
+                  "(Varias opciones)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Generar un nuevo alineamiento (util para modelar y evaluar un cruce con otra red)",
+          "sub": false,
+          "route": {
+            "copy": "Terrain > Alignment > New Alignment…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Terrain",
+                  "Alignment",
+                  "New Alignment…"
+                ]
+              }
+            ]
+          },
+          "comment": "Previamente se debió haber cargado los PIs de la ubicación de los apoyos de la línea existente a evaluar",
+          "commentList": null,
+          "images": [
+            "assets/img/step-042.jpg"
+          ]
+        },
+        {
+          "title": "Girar una estructura sobre su eje",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Rotate > (Freehand o Bisect Points)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Rotate",
+                  "(Freehand o Bisect Points)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-043.jpg"
+          ]
+        },
+        {
+          "title": "Agregar zonas restringidas",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Automatic Spotting > Spotting Constraints > (acá hay multiples opciones)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Automatic Spotting",
+                  "Spotting Constraints",
+                  "(acá hay multiples opciones)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-044.jpg"
+          ]
+        },
+        {
+          "title": "Consultar tabla de cantones o secciones",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Table…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Table…"
+                ]
+              }
+            ]
+          },
+          "comment": "Con esta acción se puede consultar y ver un resumen de los cantones o secciones de línea, igualmente se puede realizar acciones automáticas como auto flechado y otros (columna \"Command To Apply\")",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Realizar verificación térmica del conductor",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Thermal Calculations (IEEE, CIGRE, and TNSP) > Steady-State Temperature versus Current Graph",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Thermal Calculations (IEEE, CIGRE, and TNSP)",
+                  "Steady-State Temperature versus Current Graph"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Calcular la temperatura de conducción en estado estable",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Thermal Calculations (IEEE, CIGRE, and TNSP > Steady-State Conductor Temperature…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Thermal Calculations (IEEE, CIGRE, and TNSP",
+                  "Steady-State Conductor Temperature…"
+                ]
+              }
+            ]
+          },
+          "comment": "Determina la temperatura de conducción del conductor",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Calcular capacidad de conducción en estado estable",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Thermal Calculations (IEEE, CIGRE, and TNSP > Steady-State Thermal Rating…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Thermal Calculations (IEEE, CIGRE, and TNSP",
+                  "Steady-State Thermal Rating…"
+                ]
+              }
+            ]
+          },
+          "comment": "Determina la capacidad de conducción del conductor",
+          "commentList": null,
+          "images": [
+            "assets/img/step-045.jpg"
+          ]
+        },
+        {
+          "title": "Calcular la capacidad de cortocircuito del conductor",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Thermal Calculations (IEEE, CIGRE, and TNSP > Transient Thermal of Fault Rating…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Thermal Calculations (IEEE, CIGRE, and TNSP",
+                  "Transient Thermal of Fault Rating…"
+                ]
+              }
+            ]
+          },
+          "comment": "Determina la capacidad de cortocircuito del conductor",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Calcular parámetros eléctricos de la línea",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Electric > Full Line Constant Calculator…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Electric",
+                  "Full Line Constant Calculator…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Crear una nueva linea/distribución",
+          "sub": false,
+          "route": {
+            "copy": "Lines > Edit > New o Copy",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Lines",
+                  "Edit",
+                  "New o Copy"
+                ]
+              }
+            ]
+          },
+          "comment": "Esta opción es útil si se quiere realizar una nueva distribución (plantillado) de estructuras sin perder la distribución actual, se pueden editar u ocultar las otras distribuciones creadas",
+          "commentList": null,
+          "images": [
+            "assets/img/step-046.jpg"
+          ]
+        },
+        {
+          "title": "Crear/Editar/Eliminar anotaciones",
+          "sub": false,
+          "route": {
+            "copy": "Drafting > Lines and Annotation > (varias opciones)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Drafting",
+                  "Lines and Annotation",
+                  "(varias opciones)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-047.jpg"
+          ]
+        },
+        {
+          "title": "Alarmas (warnings), identificación de alarmas",
+          "sub": false,
+          "route": {
+            "copy": "Drafting > Display Options > Show Structure and Section Check Bitmaps",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Drafting",
+                  "Display Options",
+                  "Show Structure and Section Check Bitmaps"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-048.jpg"
+          ]
+        },
+        {
+          "title": "Colocar retenidas en el modelo tipo palito",
+          "sub": false,
+          "route": {
+            "copy": "Structures > Edit Structure\nStructures Add\nSections > Add o Add Graphical",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Structures",
+                  "Edit Structure"
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Structures Add"
+                ]
+              },
+              {
+                "alt": true,
+                "segments": [
+                  "Sections",
+                  "Add o Add Graphical"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": [
+            "1. Editar las estructuras para que incluyar un set nuevo por cada retenida que tenga el apoyo",
+            "2. Crear una estructura tipo retendida que va a tener un set de engrape",
+            "3. Ingresar los puntos de terreno (981 retenida) donde deben ir las retenidas y asignarle la estructura de retendida",
+            "4. Realizar el tendido o el tendido grafico entre el poste y el punto de retenida en el piso"
+          ],
+          "images": [
+            "assets/img/step-049.jpg"
+          ]
+        },
+        {
+          "title": "Evaluar separación entre redes en un cruce",
+          "sub": false,
+          "route": {
+            "copy": "Sections > Clearances > Between Sections",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Sections",
+                  "Clearances",
+                  "Between Sections"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": []
+        }
+      ]
+    }
+  ],
+  "plspole": [
+    {
+      "title": "Arranque y configuración",
+      "desc": "Carpeta, archivo, preferencias y tipo de análisis.",
+      "steps": [
+        {
+          "title": "Crear carpeta donde se guardará la estructura",
+          "sub": false,
+          "route": null,
+          "comment": "Crear una sola carpeta y en ella guardar todos los elementos estructurales generados por el PLS-POLE",
+          "commentList": null,
+          "images": [
+            "assets/img/step-050.jpg"
+          ]
+        },
+        {
+          "title": "Crear una nueva estructura",
+          "sub": false,
+          "route": {
+            "copy": "File > New > Standard Interface",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "New",
+                  "Standard Interface"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-051.jpg"
+          ]
+        },
+        {
+          "title": "Guardar estructura",
+          "sub": false,
+          "route": {
+            "copy": "File > Save As…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "Save As…"
+                ]
+              }
+            ]
+          },
+          "comment": "Asignar un nombre al proyecto y guardar en la carpeta creada inicialmente (se recomienda que el nombre describa el material del poste, resistencia, altura y armado, ej: PH_14x1050_C72C)",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Configurar preferencias",
+          "sub": false,
+          "route": {
+            "copy": "File > Preferences…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "Preferences…"
+                ]
+              }
+            ]
+          },
+          "comment": "Configurar sistema de unidades, color de fondo y directorios de las bibliotecas",
+          "commentList": null,
+          "images": [
+            "assets/img/step-052.jpg"
+          ]
+        },
+        {
+          "title": "(Opcional) Ingresar información general y seleccionar el tipo de analisis",
+          "sub": false,
+          "route": {
+            "copy": "General > General Data…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "General",
+                  "General Data…"
+                ]
+              }
+            ]
+          },
+          "comment": "Siempre seleccionar análisis no lineal (es mas exacto)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-053.jpg"
+          ]
+        },
+        {
+          "title": "Ocultar/Mostrar Etiquetas de uniones y mostrar circulos en las uniones",
+          "sub": true,
+          "route": {
+            "copy": "Click en el boton 3D o View > Display Options > Set Rotation, Color and Label Options…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Click en el boton 3D o View",
+                  "Display Options",
+                  "Set Rotation, Color and Label Options…"
+                ]
+              }
+            ]
+          },
+          "comment": "Joint Labels = None/Label y habilitar Draw Joint Circles",
+          "commentList": null,
+          "images": []
+        }
+      ]
+    },
+    {
+      "title": "Componentes disponibles",
+      "desc": "Construir la biblioteca antes de modelar.",
+      "steps": [
+        {
+          "title": "Crear/incluir poste a los componentes disponibles",
+          "sub": false,
+          "route": {
+            "copy": "Components > Concrete Pole…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Components",
+                  "Concrete Pole…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-054.jpg"
+          ]
+        },
+        {
+          "title": "Crear/incluir grapas a los componentes disponibles",
+          "sub": false,
+          "route": {
+            "copy": "Components > Insulators > Clamp Properties…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Components",
+                  "Insulators",
+                  "Clamp Properties…"
+                ]
+              }
+            ]
+          },
+          "comment": "\"Holding capacity\" = Capacidad del elemento<br>\"Hardware capacity\" =  Capacidad de los herrajes asociados al elemento",
+          "commentList": null,
+          "images": [
+            "assets/img/step-055.jpg"
+          ]
+        },
+        {
+          "title": "Descargar elementos desde las librerias de PLS",
+          "sub": false,
+          "route": {
+            "copy": "File > Preferences… (doble click en el directorio correspondiente y luego en PLS Downloads)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "File",
+                  "Preferences… (doble click en el directorio correspondiente y luego en PLS Downloads)"
+                ]
+              }
+            ]
+          },
+          "comment": "Luego de ingresar en PLS Downloads, en la parte derecha de la pantalla de despliega los elementos disponibles de descarga, al dar doble click los elementos se descargarán",
+          "commentList": null,
+          "images": [
+            "assets/img/step-056.jpg"
+          ]
+        },
+        {
+          "title": "Cargar retenidas desde base de datos",
+          "sub": false,
+          "route": {
+            "copy": "Components > Cable… > Merge > (Seleccionar archivo .cab descargado)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Components",
+                  "Cable…",
+                  "Merge",
+                  "(Seleccionar archivo .cab descargado)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-057.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Geometría del modelo",
+      "desc": "Armar el poste y enlazarlo con PLS-CADD.",
+      "steps": [
+        {
+          "title": "Cargar poste al modelo",
+          "sub": false,
+          "route": {
+            "copy": "Geometry > Concrete Pole…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Geometry",
+                  "Concrete Pole…"
+                ]
+              }
+            ]
+          },
+          "comment": "Diligenciar campos, en attach label colocar todos los puntos de engrape necesarios (ver imagen en la nota de esta celda)",
+          "commentList": null,
+          "images": [
+            "assets/img/step-058.jpg",
+            "assets/img/step-059.jpg"
+          ]
+        },
+        {
+          "title": "Cargar grapas al modelo",
+          "sub": false,
+          "route": {
+            "copy": "Geometry > Insulators > Clamp…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Geometry",
+                  "Insulators",
+                  "Clamp…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-060.jpg"
+          ]
+        },
+        {
+          "title": "Asociar puntos de engrape con los set de PLSCADD",
+          "sub": false,
+          "route": {
+            "copy": "Geometry > PLS-CADD Z > Insulator Link…",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Geometry",
+                  "PLS-CADD Z",
+                  "Insulator Link…"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-061.jpg"
+          ]
+        },
+        {
+          "title": "Instalar retenida",
+          "sub": false,
+          "route": {
+            "copy": "Geometry > Guys (o tambien icono Add Element)",
+            "lines": [
+              {
+                "alt": false,
+                "segments": [
+                  "Geometry",
+                  "Guys (o tambien icono Add Element)"
+                ]
+              }
+            ]
+          },
+          "comment": "",
+          "commentList": null,
+          "images": [
+            "assets/img/step-062.jpg"
+          ]
+        },
+        {
+          "title": "Agregar una cruceta al modelo",
+          "sub": true,
+          "route": null,
+          "comment": "",
+          "commentList": null,
+          "images": []
+        },
+        {
+          "title": "Agregar un aislador al modelo",
+          "sub": true,
+          "route": null,
+          "comment": "",
+          "commentList": null,
+          "images": []
+        }
+      ]
+    }
+  ]
+}

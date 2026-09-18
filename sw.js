@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = 'pls-cadd-guide-' + CACHE_VERSION;
 
 const APP_SHELL = [
@@ -6,6 +6,7 @@ const APP_SHELL = [
   'index.html',
   'css/styles.css',
   'js/app.js',
+  'steps.json',
   'manifest.webmanifest',
   'assets/icons/icon-192.png',
   'assets/icons/icon-512.png',
