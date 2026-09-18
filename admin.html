@@ -77,6 +77,9 @@
   .admin-group textarea[data-field="gdesc"]{margin-top:8px}
   .admin-move{display:flex;gap:6px;flex:none;flex-wrap:nowrap}
   .admin-move button{flex:none;white-space:nowrap;height:30px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;padding:0 10px;font-family:var(--display);font-size:12.5px;font-weight:700}
+  .admin-move .admin-danger{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-border)}
+  .admin-move .admin-danger:hover{background:var(--btn-hover-bg);color:var(--btn-ink)}
+  .admin-move .admin-danger.confirming{background:rgba(239,68,68,.16);color:#EF4444;border-color:#EF4444}
   .admin-move button[data-action^="up-"], .admin-move button[data-action^="down-"]{width:30px;padding:0}
   .admin-move button:disabled{opacity:.35;cursor:default}
   .admin-move .admin-danger{width:auto}
