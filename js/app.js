@@ -12,6 +12,17 @@
     localStorage.setItem(THEME_KEY, next);
   });
 
+  var adminGear = document.getElementById('adminGear');
+  adminGear.addEventListener('click', function () {
+    var key = window.prompt('Clave de administración:');
+    if (key === null) return;
+    if (key.trim().toLowerCase() === 'pls') {
+      window.location.href = 'admin.html';
+    } else {
+      window.alert('Clave incorrecta.');
+    }
+  });
+
   var q = document.getElementById('q');
   var empty = document.getElementById('empty');
   var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
