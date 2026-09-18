@@ -8,7 +8,7 @@
           "title": "Crear carpeta donde se guardará el proyecto",
           "sub": false,
           "route": null,
-          "comment": "Crear una carpeta y en ella guardar todos los archivos generados por el PLS-CADD (dentro de esta carpeta se recomienda crear algunas subcarpetas \"Cables\", \"Structures\", Attachments\")",
+          "comment": "Crear una carpeta en el PC destinada al proyecto, para almacenar en ella todos los archivos generados por PLS-CADD. Se recomienda organizar la información mediante subcarpetas, por ejemplo: Cables, Structures y Attachments.",
           "commentList": null,
           "images": [
             "assets/img/step-001.jpg"
