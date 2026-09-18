@@ -1,40 +1,41 @@
 # PathPLS — Guía interactiva PLS-CADD / PLS-POLE
 
-App web estática (sin build, sin dependencias de servidor), instalable como PWA. Sirve como guía paso a paso de referencia rápida para el modelado de líneas de transmisión en PLS-CADD y PLS-POLE.
+App web estática (sin build, sin dependencias de servidor), instalable como PWA. Sirve como guía paso a paso de referencia rápida para el modelado de líneas de transmisión en PLS-CADD y PLS-POLE. Publicada en `https://wpzprojects.github.io/PathPLS/` (repo `wpzprojects/PathPLS`, rama `main`).
 
 ## Estructura
 
-- `index.html` — página pública: buscador, pestañas (PLS-CADD / Otras acciones / PLS-POLE / De interés), tarjetas de pasos con acordeón, lightbox de imágenes, engranaje oculto para entrar a admin (clave `pls`, ver `js/app.js`).
-- `admin.html` + `js/admin.js` — editor de contenido protegido (sin auth real más allá del gate cosmético en index). Lee/escribe `steps.json` directamente en GitHub vía API REST (token personal con permiso "repo" guardado en `localStorage`, nunca se envía a otro sitio).
-- `js/app.js` — lógica de la página pública: tema claro/oscuro, tabs, búsqueda/filtro, acordeón de pasos, copiar ruta de menú, lightbox, y el render dinámico de las tarjetas a partir de `steps.json`.
-- `css/styles.css` — todos los estilos (tokens de color con `--variables`, tema claro/oscuro vía `[data-theme]`).
-- `steps.json` — fuente de datos única. Estructura: `{ plscadd: [...], otras: [...], plspole: [...] }`, cada panel es un array de grupos `{ title, desc, steps: [...] }`, cada step: `{ title, sub, route, comment, commentList, images }`.
-  - `route`: `null` o `{ copy, lines: [{ alt, segments: [...] }] }` — rutas de menú tipo `File > New > PLSCADD`, con posible variante alterna (`alt: true`, prefijo "o ").
-  - `comment` (string) o `commentList` (array, se renderiza como viñetas) — mutuamente excluyentes.
-  - `images`: array de rutas relativas (`assets/img/...`).
-  - El panel "De interés" (glosario, extensiones de archivo, conversiones) está *hardcodeado* en `index.html`, no viene de `steps.json`.
-- `manifest.webmanifest` + `sw.js` — PWA: precache de app shell, cache-first para imágenes/páginas visitadas.
-- `assets/icons/`, `assets/img/` — íconos de la app y capturas de pantalla de cada paso.
+- `index.html` — página pública: buscador, pestañas (PLS-CADD / Otras acciones / PLS-POLE / De interés / Ayuda), tarjetas de pasos con acordeón, lightbox de imágenes. Los paneles "De interés" y "Ayuda" (resumen por sección + tarjeta de contacto) están *hardcodeados* aquí. El botón de entrada a admin (ícono de sliders, clave `pls`, ver `js/app.js`) vive al final del panel "Ayuda".
+- `admin.html` + `js/admin.js` — editor de contenido (sin auth real más allá del gate cosmético). Lee/escribe `steps.json` en GitHub vía API REST. El repo destino va fijo en constantes (`GH_OWNER/GH_REPO/GH_BRANCH/GH_PATH` en `admin.js`); el único campo de conexión editable es el token personal ("repo"), guardado en `localStorage` (evento `input`, no `change`) y nunca enviado a otro sitio.
+- `js/app.js` — lógica pública: tema claro/oscuro (clave `pls-theme` en localStorage), tabs, búsqueda/filtro, acordeón, copiar ruta, lightbox, render dinámico de tarjetas desde `steps.json` (solo paneles `plscadd`, `otras`, `plspole`).
+- `css/styles.css` — estilos compartidos con tokens `--variables`; tema claro por defecto, oscuro vía `@media (prefers-color-scheme)` o `[data-theme="dark"]`.
+- `steps.json` — fuente de datos: `{ plscadd, otras, plspole }`, cada uno array de grupos `{ title, desc, steps }`; step: `{ title, sub, route, comment, commentList, images }`.
+  - `route`: `null` o `{ copy, lines: [{ alt, segments }] }`. `comment` (string) o `commentList` (viñetas), excluyentes. `images`: rutas relativas `assets/img/...`.
+- `manifest.webmanifest` + `sw.js` — PWA. Estrategia: **red primero** (caché solo como respaldo offline) para navegaciones y todo `.html/.js/.css/.json`; caché primero solo para íconos/imágenes. Subir `CACHE_VERSION` cuando cambien archivos del app shell cacheados en install (íconos).
+- `assets/icons/` (fondo verde `#1E4034`), `assets/img/` (capturas de pasos).
 
-## Cómo se edita el contenido
+## admin.html — cómo funciona el editor
 
-El flujo normal es vía `admin.html`:
-1. Se carga `steps.json` desde GitHub (token + owner/repo/branch/path, con defaults `wpzprojects/PathPLS/main/steps.json`).
-2. Se edita en el navegador (grupos y pasos con mover/eliminar/insertar, campos con `data-field` que se parsean/formatean con helpers en `admin.js`: `parseRouteText`/`routeToText`, `parseCommentText`/`commentToText`, `parseImagesText`/`imagesToText`).
-3. Imágenes: se pueden subir por input de archivo o pegar (Ctrl+V) directamente en el campo de imágenes; se suben a `assets/img/` vía la API de contenidos de GitHub y se añade la ruta al step.
-4. Se guarda con "Guardar en GitHub" (PUT a la API con el `sha` cargado; detecta conflicto 409 si alguien más guardó primero).
-5. Cada grupo/step tiene un `_cid` interno (id temporal para animaciones FLIP y tracking en el DOM) que se agrega al cargar y se elimina (`stripCids`) antes de guardar — nunca debe persistirse en `steps.json`.
+1. "Cargar desde GitHub" trae `steps.json` (+ `sha`); "Guardar en GitHub" hace PUT con ese `sha` (409 = conflicto, recargar).
+2. Grupos y pasos: mover ▲▼, eliminar (doble clic de confirmación con clase `confirming`, **sin diálogos nativos**), insertar entre pasos con el "+" circular. Campos con `data-field` parseados con `parseRouteText/routeToText`, `parseCommentText/commentToText`.
+3. **Imágenes por paso**: un solo widget `.admin-images` (alto fijo 55px) con miniaturas + botón "+". Subir por botón, arrastrar un archivo al campo, o pegar (Ctrl+V) → sube a `assets/img/` vía API y agrega la ruta. Al pasar sobre una miniatura aparece "×" (doble clic para borrar). Arrastrar miniaturas reordena en vivo (FLIP, `dragThumb`/`thumbFlip`/`commitThumbOrder`; identidad por `data-path`). Las recién subidas se muestran con `URL.createObjectURL` (`localPreviews`) porque la ruta remota tarda en existir en Pages. No hay edición manual de rutas de imagen.
+4. Cada grupo/step lleva un `_cid` temporal (animaciones FLIP); se agrega al cargar y se quita con `stripCids` antes de guardar — nunca debe llegar a `steps.json`.
 
-No hay build ni bundler: los cambios en `.html`/`.js`/`.css` se ven directo recargando el navegador. Para desarrollo local con service worker funcional, servir con HTTP (no `file://`), p. ej. `python3 -m http.server 8080`.
+## Sistema visual de admin (todo en el `<style>` de `admin.html`)
 
-## Convenciones de estilo
+- Tokens por tema (claro en `:root`, oscuro en los dos bloques dark): `--group-bg/-border`, `--group-top-bg` (relleno verde del encabezado de grupo `.admin-group-top`), `--step-bg/-border`, `--card-shadow`, `--field-bg`, `--btn-*` / `--btn-hover-*` (botones de acción: verde oscuro `--accent-ink` en claro, gris neutro en oscuro), `--move-*` (flechas ▲▼: verde en claro, gris en oscuro).
+- Tema oscuro usa una paleta gris neutra (sobrescribe `--surface*`, `--line*`, `--ink*`) solo dentro de admin; el verde queda para acentos. El fondo de página (`--ground`) no se toca.
+- "Eliminar" solo se pone rojo (`.confirming`) al confirmar. Ojo con la especificidad: `.admin-move button` (0,1,1) le gana a `.admin-danger`; por eso existen reglas `.admin-move .admin-danger…`.
+- El "+" de insertar entre pasos es verde en reposo y se invierte (relleno verde, "+" blanco) en hover.
+- Línea divisoria grupo/pasos: `border-top` de `.admin-steps` con márgenes negativos (-18px) para llegar de borde a borde; el espaciado sobre/bajo la línea se calibró empíricamente (~16.9px).
 
-- JS: IIFEs `(function () { ... })()`, `var`, sin frameworks ni módulos, ES5-friendly con algo de ES6 (`TextEncoder`, arrow-free).
-- Sin comentarios explicativos salvo donde el comportamiento no es obvio (ver estilo actual en `app.js`/`admin.js`).
-- CSS con variables custom (`--surface`, `--ink`, `--accent`, `--line`, etc.) para soportar tema claro/oscuro; en admin, tarjetas/steps usan `color-mix()` para tonos derivados del fondo.
-- Sin frameworks de testing; verificación es manual en navegador (recargar `index.html`/`admin.html`).
+## Convenciones
+
+- JS: IIFEs, `var`, sin frameworks ni módulos, ES5-friendly. Sin comentarios salvo donde el porqué no es obvio.
+- Sin tests; verificación manual en navegador. Para probar admin sin token real, se puede sobrescribir `window.fetch` para simular la API de GitHub.
+- Al probar en local, el caché HTTP del navegador puede servir JS viejo: usar `?v=algo` en la URL o desregistrar el SW.
+- Tipografía/estilo de íconos: trazo fino monocolor con `currentColor`; evitar composiciones recargadas.
 
 ## Notas de seguridad
 
-- El "gate" de admin en `index.html` (clave `pls`) es solo para evitar clics accidentales, no es seguridad real — cualquiera con el HTML puede ver la clave.
-- La seguridad real de escritura depende del token de GitHub que cada usuario pega en `admin.html`; se persiste en `localStorage` del navegador. No hay backend propio.
+- El gate de admin (clave `pls`, campo de texto plano a propósito para que Chrome no lo mezcle con el token en su gestor de contraseñas) no es seguridad real: la clave está visible en `js/app.js`.
+- La seguridad real de escritura es el token de GitHub de cada usuario en `localStorage`. No hay backend propio.
