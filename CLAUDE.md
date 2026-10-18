@@ -33,6 +33,8 @@ App web estática (sin build, sin dependencias de servidor), instalable como PWA
 
 ## Convenciones
 
+- **Al empezar cualquier tarea:** `git pull` antes de tocar archivos (puede haber commits hechos desde Claude en la web
+  o el celular).
 - JS: IIFEs, `var`, sin frameworks ni módulos, ES5-friendly. Sin comentarios salvo donde el porqué no es obvio.
 - Sin tests; verificación manual en navegador. Para probar admin sin token real, se puede sobrescribir `window.fetch` para simular la API de GitHub.
 - Al probar en local, el caché HTTP del navegador puede servir JS viejo: usar `?v=algo` en la URL o desregistrar el SW.
